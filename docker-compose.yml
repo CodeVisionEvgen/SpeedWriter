@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+  backend:
+    build: ./backend
+    container_name: "SpeedBackendContainer"
+    volumes:
+      - "./backend:/projects/SpeedWriting/back"
+    ports:
+      - "4040:4040"
+    restart: always
+    command: "npm run start:dev"
+  frontend:
+    build: ./frontend
+    container_name: "SpeedFrontendContainer"
+    restart: always
+    volumes:
+      - "./frontend:/projects/SpeedWriting/front"
+    ports:
+      - "80:3000"
+    command: "npm run dev"
+    depends_on:
+      - backend
