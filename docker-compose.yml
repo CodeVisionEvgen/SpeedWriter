@@ -1,5 +1,6 @@
 version: '3.1'
 
+
 services:
   backend:
     build: ./backend
@@ -10,6 +11,8 @@ services:
       - "4040:4040"
     restart: always
     command: "npm run start:dev"
+    depends_on:
+      - mongo
   frontend:
     build: ./frontend
     container_name: "SpeedFrontendContainer"
@@ -21,3 +24,19 @@ services:
     command: "npm run dev"
     depends_on:
       - backend
+  mongo:
+    image: mongo
+    container_name: SpeedDatabaseContainer
+    env_file:
+      - ".env"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_ROOT_DATABASE}
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-entrypoint/entry-point.js:/docker-entrypoint-initdb.d/init.js:ro
+      - mongo-datas
+volumes:
+  mongo-datas:
