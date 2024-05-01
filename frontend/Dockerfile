@@ -1,6 +1,6 @@
 FROM node:18
 
-WORKDIR /projects/SpeedWriting/front
+WORKDIR /projects/SpeedWriter/front
 
 COPY ./package.json ./tsconfig.json ./next.config.js ./
 

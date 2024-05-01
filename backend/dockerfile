@@ -1,6 +1,6 @@
 FROM node:18
 
-WORKDIR /projects/SpeedWriting/back
+WORKDIR /projects/SpeedWriter/back
 
 COPY ./package.json ./tsconfig.json ./
 

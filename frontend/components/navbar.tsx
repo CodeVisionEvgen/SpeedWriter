@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 import logo from "@/public/favicon.ico"
 import {
@@ -12,11 +14,20 @@ import {
 import Image from 'next/image';
 import { Link } from '@nextui-org/link';
 import { Button } from '@nextui-org/button';
+import { Spacer } from '@nextui-org/spacer';
+import { useRouter } from 'next/navigation';
 export default function AppNavbar() {
+	const router = useRouter();
+
+	function RouterToMainPage() {
+		router.push('/')
+	}
+
 	return (
 		<Navbar>
-			<NavbarBrand>
-				<Image unoptimized src={logo} width={40} alt='logo' height={40} />
+			<NavbarBrand onClick={RouterToMainPage} className=' cursor-pointer'>
+				<Image className='remove-image-drag' draggable="false" unoptimized src={logo} width={40} alt='logo' height={40} />
+				<Spacer />
 				<h3 className=' text-2xl flex items-end select-none'>SpeedWriter</h3>
 			</NavbarBrand>
 			<NavbarContent className="hidden sm:flex gap-4" justify="center">
