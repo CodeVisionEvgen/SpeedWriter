@@ -1,2 +1,4 @@
-.env
+mongo-entrypoint
+/mongo-entrypoint
 /mongo-entrypoint/
+.env

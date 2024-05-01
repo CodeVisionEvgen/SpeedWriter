@@ -6,5 +6,4 @@ db.createUser({
     db: "SpeedWriter"
   }]
 });
-
-// db.auth({"user": "admin","pwd": "1q2w3e4r"})asd
+// db.auth({"user": "admin","pwd": "1q2w3e4r"})
