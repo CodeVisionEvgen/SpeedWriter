@@ -7,4 +7,4 @@ db.createUser({
   }]
 });
 
-// db.auth({"user": "admin","pwd": "1q2w3e4r"})
+// db.auth({"user": "admin","pwd": "1q2w3e4r"})asd
