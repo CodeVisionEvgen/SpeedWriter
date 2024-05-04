@@ -7,7 +7,8 @@ import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nex
 import { Input } from "@nextui-org/input"
 import { motion as Motion } from "framer-motion"
 import AdminTableLevels from '@/components/admin/table';
-import AdminModalContext from '@/components/admin/modals/AdminModalContext';
+import { AdminModalAddContext } from '@/components/admin/modals/AdminModalContext';
+import Section from '@/components/Section';
 const MonitionVariants = {
   show: {
     opacity: 1,
@@ -70,7 +71,7 @@ export default function Page() {
     setIsActiveUpdate(false)
     setSwitchSelect(SwitchSelectMode.none);
 
-    setModalContent(AdminModalContext)
+    setModalContent(AdminModalAddContext)
     onOpenChange();
   }
   return (
@@ -85,7 +86,7 @@ export default function Page() {
           </ModalBody>
         </ModalContent>
       </Modal>
-      <div className=' bg-gray-700/50 rounded-lg p-5'>
+      <Section>
         <span className='flex justify-between w-full'>
           <h3 className=' text-xl text-gray-500'>All levels</h3>
           <div className="flex gap-4">
@@ -114,7 +115,7 @@ export default function Page() {
         </span>
         <Spacer y={10} />
         <AdminTableLevels switchSelect={switchSelect} />
-      </div >
+      </Section>
     </>
   )
 }

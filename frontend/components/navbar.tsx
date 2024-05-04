@@ -11,11 +11,13 @@ import {
 	NavbarMenu,
 	NavbarMenuItem
 } from "@nextui-org/navbar";
+import { Avatar } from '@nextui-org/avatar';
 import Image from 'next/image';
 import { Link } from '@nextui-org/link';
 import { Button } from '@nextui-org/button';
 import { Spacer } from '@nextui-org/spacer';
 import { useRouter } from 'next/navigation';
+import { UserTumb } from './user';
 export default function AppNavbar() {
 	const router = useRouter();
 
@@ -32,30 +34,33 @@ export default function AppNavbar() {
 			</NavbarBrand>
 			<NavbarContent className="hidden sm:flex gap-4" justify="center">
 				<NavbarItem>
-					<Link color="foreground" href="#">
-						Top profiles
-					</Link>
-				</NavbarItem>
-				<NavbarItem isActive>
-					<Link href="#" aria-current="page">
-						Levels
+					<Link color="foreground" href="top">
+						Blog
 					</Link>
 				</NavbarItem>
 				<NavbarItem>
-					<Link color="foreground" href="#">
+					<Link href="levels" color="foreground">
+						Main
+					</Link>
+				</NavbarItem>
+				<NavbarItem>
+					<Link color="foreground" href="about">
 						About
 					</Link>
 				</NavbarItem>
 			</NavbarContent>
 			<NavbarContent justify="end">
-				<NavbarItem className="hidden lg:flex">
+				<NavbarItem>
+					<UserTumb src="https://api.dicebear.com/8.x/bottts/svg?seed=Tigger" />
+				</NavbarItem>
+				{/* <NavbarItem className="hidden lg:flex">
 					<Link href="#">Login</Link>
 				</NavbarItem>
 				<NavbarItem>
 					<Button as={Link} color="primary" href="#" variant="flat">
 						Sign Up
 					</Button>
-				</NavbarItem>
+				</NavbarItem> */}
 			</NavbarContent>
 		</Navbar>
 	)

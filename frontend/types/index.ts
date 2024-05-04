@@ -10,8 +10,13 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
-export type LevelHeadersType = {
+export interface ILevel {
+  _id: string;
   LevelPosition: number;
   LevelName: string;
   LevelDifficulty: LevelDifficultyEmuns;
-};
+  LevelText: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}

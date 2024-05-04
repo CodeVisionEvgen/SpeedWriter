@@ -8,8 +8,15 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class LevelsService {
   constructor(@InjectModel(Level.name) private levelModel: Model<Level>) {}
-  create(createLevelDto: CreateLevelDto) {
-    return new this.levelModel(createLevelDto).save();
+  async create(createLevelDto: CreateLevelDto) {
+    const LastDoc = await this.levelModel.findOne().sort({
+      LevelPosition: -1,
+    });
+    const level = new this.levelModel({
+      LevelPosition: LastDoc ? ++LastDoc.LevelPosition : 1,
+      ...createLevelDto,
+    });
+    return await level.save();
   }
 
   findAll() {

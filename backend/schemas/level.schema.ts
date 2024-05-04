@@ -11,21 +11,27 @@ export enum LevelDifficultyEnums {
 
 @Schema({
   timestamps: true,
+  strict: 'throw',
 })
 export class Level {
   @Prop({
+    type: Number,
+    required: true,
+  })
+  LevelPosition: number;
+  @Prop({
     type: String,
-    isRequired: true,
+    required: true,
   })
   LevelName: string;
   @Prop({
-    isRequired: true,
+    required: true,
     enum: LevelDifficultyEnums,
   })
   LevelDifficulty: LevelDifficultyEnums;
   @Prop({
     type: String,
-    isRequired: true,
+    required: true,
   })
   LevelText: string;
 }

@@ -72,7 +72,7 @@ export default function Page() {
 
   return (
     <>
-      <Modal size="full" isDismissable={false} isOpen={isOpen} onClose={onClose} hideCloseButton backdrop='blur' >
+      <Modal size="full" isDismissable={false} isOpen={isOpen} onClose={onClose} hideCloseButton backdrop='blur'>
         <ModalContent>
           <ModalHeader>
             Level 1

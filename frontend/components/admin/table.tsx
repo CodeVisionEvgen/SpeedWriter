@@ -1,8 +1,12 @@
 "use client"
-import { LevelDifficultyEmuns, LevelHeadersType } from '@/types';
+import { FetchLevels } from '@/app/actions/Levels';
+import { ILevel } from '@/types';
 import { Chip } from '@nextui-org/chip';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table'
-import React, { useState } from 'react'
+import { Spinner } from "@nextui-org/spinner"
+import React, { useEffect, useState } from 'react'
+import { Button } from '@nextui-org/button';
+import { TrashIcon } from '../icons';
 
 export const LevelsDifficulty = [
   { key: 1, value: "easy", element: <Chip color='success' variant="dot" key={Math.random()}>Easy</Chip> },
@@ -10,27 +14,9 @@ export const LevelsDifficulty = [
   { key: 3, value: "hard", element: <Chip color='danger' variant="dot" key={Math.random()}>Hard</Chip> }
 ]
 
-const LevelsHeaders: LevelHeadersType[] = [
-  {
-    LevelPosition: 1,
-    LevelName: "Shekspir - Sonet 30",
-    LevelDifficulty: LevelDifficultyEmuns.Easy
-  },
-  {
-    LevelPosition: 2,
-    LevelName: "Bach - Toccata and Fugue in D minor",
-    LevelDifficulty: LevelDifficultyEmuns.Medium
-  },
-  {
-    LevelPosition: 3,
-    LevelName: "Beethoven - Symphony 5",
-    LevelDifficulty: LevelDifficultyEmuns.Hard
-  }
-]
-
-function RenderList(item: LevelHeadersType) {
+function RenderList(item: ILevel) {
   return (
-    <TableRow key={item.LevelPosition}>
+    <TableRow key={item._id}>
       <TableCell>{item.LevelPosition}</TableCell>
       <TableCell>{item.LevelName}</TableCell>
       <TableCell>{LevelsDifficulty.filter(lvl => item.LevelDifficulty == lvl.value)[0].element}</TableCell>
@@ -39,16 +25,31 @@ function RenderList(item: LevelHeadersType) {
 }
 
 export default function AdminTableLevels({ switchSelect }: any) {
+  const [levels, setLevels] = useState<ILevel[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  useEffect(() => {
+    FetchLevels().then(lvl => {
+      if (lvl) {
+        setLevels(lvl);
+        setIsLoading(false);
+      }
+    })
+  }, [])
   return (
-    <Table aria-label="Example static collection table" selectionMode={switchSelect}>
-      <TableHeader>
-        <TableColumn>Level Position</TableColumn>
-        <TableColumn>Level Name</TableColumn>
-        <TableColumn>Level Difficulty</TableColumn>
-      </TableHeader>
-      <TableBody items={LevelsHeaders}>
-        {RenderList}
-      </TableBody>
-    </Table>
+    <>
+      <Table aria-label="collection table" selectionMode={switchSelect}>
+        <TableHeader>
+          <TableColumn>Level Position</TableColumn>
+          <TableColumn>Level Name</TableColumn>
+          <TableColumn>Level Difficulty</TableColumn>
+        </TableHeader>
+        <TableBody items={levels} isLoading={isLoading} loadingContent={<Spinner color="primary" />} emptyContent="There are no levels">
+          {RenderList}
+        </TableBody>
+      </Table>
+      <Button size='sm' className='mt-4' startContent={<TrashIcon fill='currentColor' />} color='danger'>
+        Delete
+      </Button>
+    </>
   )
 }
