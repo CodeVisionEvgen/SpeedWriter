@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { LevelsService } from './levels.service';
 import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
+import { IsObjectIdPipe } from 'nestjs-object-id';
 
 @Controller('levels')
 export class LevelsController {
@@ -24,9 +26,13 @@ export class LevelsController {
   findAll() {
     return this.levelsService.findAll();
   }
+  @Get('page/:page')
+  findByPage(@Param('page') page: string, @Query('max') maxDocs: string) {
+    return this.levelsService.findByPage(+page, +maxDocs);
+  }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get('level/:id')
+  findOne(@Param('id', IsObjectIdPipe) id: string) {
     return this.levelsService.findOne(id);
   }
 

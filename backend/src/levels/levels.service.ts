@@ -23,6 +23,23 @@ export class LevelsService {
     return this.levelModel.find();
   }
 
+  async findByPage(page: number = 1, maxDocs: number = 5) {
+    const countDocs = await this.levelModel.find().countDocuments();
+    const maxPages = Math.ceil(countDocs / maxDocs);
+    const skip = (page - 1) * maxDocs;
+    const docs = await this.levelModel
+      .aggregate()
+      .match({})
+      .sort({ _id: 1 })
+      .skip(skip)
+      .limit(maxDocs);
+
+    return {
+      maxPages,
+      docs,
+    };
+  }
+
   findOne(id: string) {
     return this.levelModel.findById(id);
   }
@@ -32,7 +49,6 @@ export class LevelsService {
   }
   // example ids url?id=234234231,23423534,234234t,34534,521,343
   async remove(ids: string) {
-    console.log(ids);
     return this.levelModel.deleteMany({ _id: { $in: ids.split(',') } });
   }
 }

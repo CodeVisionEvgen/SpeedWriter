@@ -50,7 +50,7 @@ export default function AdminTableLevels({ switchSelect, setModalContent }: { sw
   const [selectedKeys, setSelectedKeys] = useState<any>(new Set([]))
   return (
     <>
-      <Table selectedKeys={selectedKeys} onSelectionChange={setSelectedKeys} onRowAction={HandleAction} aria-label="collection table" selectionMode={switchSelect}>
+      <Table className=" max-h-[230px]" selectionBehavior="replace" selectedKeys={selectedKeys} onSelectionChange={setSelectedKeys} onRowAction={HandleAction} aria-label="collection table" selectionMode={switchSelect}>
         <TableHeader>
           <TableColumn>Level Position</TableColumn>
           <TableColumn>Level Name</TableColumn>

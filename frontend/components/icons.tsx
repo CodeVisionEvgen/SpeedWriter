@@ -46,3 +46,6 @@ export const TrashIcon = (props?: IconSvgProps) => (
 export const UpgradeIcon = (props?: IconSvgProps) => (
   < svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" {...props}> <path d="M483-120q-75 0-141-28.5T226.5-226q-49.5-49-78-115T120-482q0-75 28.5-140t78-113.5Q276-784 342-812t141-28q80 0 151.5 35T758-709v-106h60v208H609v-60h105q-44-51-103.5-82T483-780q-125 0-214 85.5T180-485q0 127 88 216t215 89q125 0 211-88t86-213h60q0 150-104 255.5T483-120Zm122-197L451-469v-214h60v189l137 134-43 43Z" /></svg>
 )
+export const MailIcon = (props?: IconSvgProps) => (
+  < svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" {...props}> <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z" /></svg>
+)
