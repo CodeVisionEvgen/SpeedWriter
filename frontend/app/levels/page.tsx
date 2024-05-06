@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { FetchLevels } from "../actions/Levels";
 function RenderList(item: ILevel) {
   return (
-    <TableRow key={Math.random()}>
+    <TableRow key={item._id}>
       <TableCell>{item.LevelPosition}</TableCell>
       <TableCell>{item.LevelName}</TableCell>
       <TableCell>{LevelsDifficulty.filter(lvl => item.LevelDifficulty == lvl.value)[0].element}</TableCell>

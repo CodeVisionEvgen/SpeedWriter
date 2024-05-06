@@ -1,6 +1,6 @@
 "use client"
 import { Button, ButtonGroup } from '@nextui-org/button'
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { AddIcon, CancelIcon, DeleteIcon, SearchIcon, UpdateIcon } from '@/components/icons'
 import { Spacer } from "@nextui-org/spacer";
 import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/modal';
@@ -9,6 +9,7 @@ import { motion as Motion } from "framer-motion"
 import AdminTableLevels from '@/components/admin/table';
 import { AdminModalAddContext } from '@/components/admin/modals/AdminModalContext';
 import Section from '@/components/Section';
+import { ModalContent as ModalContentType, SwitchSelectMode } from '@/types';
 const MonitionVariants = {
   show: {
     opacity: 1,
@@ -24,21 +25,10 @@ const MonitionVariants = {
   }
 };
 
-export type ModalContent = {
-  header: ReactNode | JSX.Element | null,
-  body: ReactNode | JSX.Element | null
-}
-
-enum SwitchSelectMode {
-  none = "none",
-  single = "single",
-  multiple = "multiple"
-}
-
 
 
 export default function Page() {
-  const [modalContent, setModalContent] = useState<ModalContent>();
+  const [modalContent, setModalContent] = useState<ModalContentType | null>(null);
   const [isActiveUpdate, setIsActiveUpdate] = useState<boolean>(false);
   const [isActiveDelete, setIsActiveDelete] = useState<boolean>(false);
   const [switchSelect, setSwitchSelect] = useState<SwitchSelectMode>(SwitchSelectMode.none);
@@ -65,14 +55,17 @@ export default function Page() {
     }
     setIsActiveDelete(!isActiveDelete);
   }
-
+  useEffect(() => {
+    if (modalContent) {
+      onOpenChange();
+    }
+  }, [modalContent])
   function HandleAddAction() {
     setIsActiveDelete(false)
     setIsActiveUpdate(false)
     setSwitchSelect(SwitchSelectMode.none);
 
     setModalContent(AdminModalAddContext)
-    onOpenChange();
   }
   return (
     <>
@@ -114,7 +107,7 @@ export default function Page() {
           </div>
         </span>
         <Spacer y={10} />
-        <AdminTableLevels switchSelect={switchSelect} />
+        <AdminTableLevels switchSelect={switchSelect} setModalContent={setModalContent} />
       </Section>
     </>
   )

@@ -23,15 +23,16 @@ export class LevelsService {
     return this.levelModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} level`;
+  findOne(id: string) {
+    return this.levelModel.findById(id);
   }
 
-  update(id: number, updateLevelDto: UpdateLevelDto) {
-    return `This action updates a #${id} ${updateLevelDto} level`;
+  update(id: string, updateLevelDto: UpdateLevelDto) {
+    return this.levelModel.updateOne({ _id: id }, updateLevelDto);
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} level`;
+  // example ids url?id=234234231,23423534,234234t,34534,521,343
+  async remove(ids: string) {
+    console.log(ids);
+    return this.levelModel.deleteMany({ _id: { $in: ids.split(',') } });
   }
 }

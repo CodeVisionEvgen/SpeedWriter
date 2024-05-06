@@ -1,4 +1,4 @@
-import { SVGProps } from "react";
+import { ReactNode, SVGProps } from "react";
 
 export enum LevelDifficultyEmuns {
   Easy = "easy",
@@ -19,4 +19,15 @@ export interface ILevel {
   createdAt: string;
   updatedAt: string;
   __v: number;
+}
+
+export type ModalContent = {
+  header: ReactNode | JSX.Element | null;
+  body: ReactNode | JSX.Element | null;
+};
+
+export enum SwitchSelectMode {
+  none = "none",
+  single = "single",
+  multiple = "multiple",
 }
