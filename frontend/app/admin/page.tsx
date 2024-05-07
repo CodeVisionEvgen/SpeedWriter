@@ -3,11 +3,9 @@ import { Button, ButtonGroup } from '@nextui-org/button'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { AddIcon, CancelIcon, DeleteIcon, SearchIcon, UpdateIcon } from '@/components/icons'
 import { Spacer } from "@nextui-org/spacer";
-import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/modal';
 import { Input } from "@nextui-org/input"
 import { motion as Motion } from "framer-motion"
 import AdminTableLevels from '@/components/admin/table';
-import { AdminModalAddContext } from '@/components/admin/modals/AdminModalContext';
 import Section from '@/components/Section';
 import { ModalContent as ModalContentType, SwitchSelectMode } from '@/types';
 const MonitionVariants = {
@@ -28,17 +26,16 @@ const MonitionVariants = {
 
 
 export default function Page() {
-  const [modalContent, setModalContent] = useState<ModalContentType | null>(null);
   const [isActiveUpdate, setIsActiveUpdate] = useState<boolean>(false);
   const [isActiveDelete, setIsActiveDelete] = useState<boolean>(false);
-  const [switchSelect, setSwitchSelect] = useState<SwitchSelectMode>(SwitchSelectMode.none);
-  const { onOpenChange, isOpen } = useDisclosure();
+  const [updateTable, setUpdateTable] = useState<boolean>(false);
+  const [switchSelect, setSwitchSelect] = useState<SwitchSelectMode | null>(null);
 
 
   function HandleUpdateAction() {
     setIsActiveDelete(false);
     if (isActiveUpdate) {
-      setSwitchSelect(SwitchSelectMode.none);
+      setSwitchSelect(null);
     }
     else {
       setSwitchSelect(SwitchSelectMode.single);
@@ -49,36 +46,19 @@ export default function Page() {
   function HandleDeleteAction() {
     setIsActiveUpdate(false)
     if (isActiveDelete) {
-      setSwitchSelect(SwitchSelectMode.none);
+      setSwitchSelect(null);
     } else {
       setSwitchSelect(SwitchSelectMode.multiple);
     }
     setIsActiveDelete(!isActiveDelete);
   }
-  useEffect(() => {
-    if (modalContent) {
-      onOpenChange();
-    }
-  }, [modalContent])
   function HandleAddAction() {
     setIsActiveDelete(false)
     setIsActiveUpdate(false)
     setSwitchSelect(SwitchSelectMode.none);
-
-    setModalContent(AdminModalAddContext)
   }
   return (
     <>
-      <Modal onOpenChange={onOpenChange} isOpen={isOpen}>
-        <ModalContent>
-          <ModalHeader>
-            {modalContent?.header}
-          </ModalHeader>
-          <ModalBody>
-            {modalContent?.body}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
       <Section>
         <span className='flex justify-between w-full'>
           <h3 className=' text-xl text-gray-500'>All levels</h3>
@@ -107,7 +87,7 @@ export default function Page() {
           </div>
         </span>
         <Spacer y={10} />
-        <AdminTableLevels switchSelect={switchSelect} setModalContent={setModalContent} />
+        <AdminTableLevels switchSelect={switchSelect} setSwitchSelect={setSwitchSelect} />
       </Section>
     </>
   )

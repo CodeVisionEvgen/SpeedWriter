@@ -6,6 +6,12 @@ export enum LevelDifficultyEmuns {
   Hard = "hard",
 }
 
+export type GetLevelsByPageType = {
+  maxPages: number;
+  countDocs: number;
+  docs: ILevel[];
+};
+
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };

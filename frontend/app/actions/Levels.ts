@@ -1,11 +1,17 @@
-import { ILevel } from "@/types";
+import { GetLevelsByPageType, ILevel } from "@/types";
 import axios from "axios";
 export async function FetchLevels(): Promise<ILevel[]> {
   const data = (await axios("/api/levels")).data;
   return data as Promise<ILevel[]>;
 }
+export async function GetLevelByPage(
+  page: number
+): Promise<GetLevelsByPageType> {
+  const data = (await axios(`/api/levels/page/${page}?max=8`)).data;
+  return data as Promise<GetLevelsByPageType>;
+}
 export async function GetLevelById(id: string): Promise<ILevel> {
-  const data = (await axios(`/api/levels/${id}`)).data;
+  const data = (await axios(`/api/levels/level/${id}`)).data;
   return data as Promise<ILevel>;
 }
 export async function CreateLevel(

@@ -1,14 +1,16 @@
 "use client"
-import { FetchLevels } from '@/app/actions/Levels';
+import { GetLevelByPage } from '@/app/actions/Levels';
 import { ILevel } from '@/types';
 import { Chip } from '@nextui-org/chip';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table'
 import { Spinner } from "@nextui-org/spinner"
-import React, { EventHandler, FormEvent, MouseEvent, useEffect, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
+import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
 import { TrashIcon } from '../icons';
-import { ModalContent, SwitchSelectMode } from '@/types/index';
-import { AdminModalDeleteContext, AdminModalUpdateContext } from './modals/AdminModalContext';
+import { ModalContent as ModalContentType, SwitchSelectMode } from '@/types/index';
+import { AdminModalAddContext, AdminModalDeleteContext, AdminModalUpdateContext } from './modals/AdminModalContext';
+import { Pagination } from "@nextui-org/pagination"
 
 export const LevelsDifficulty = [
   { key: 1, value: "easy", element: <Chip color='success' variant="dot" key={Math.random()}>Easy</Chip> },
@@ -17,17 +19,27 @@ export const LevelsDifficulty = [
 ]
 
 
-export default function AdminTableLevels({ switchSelect, setModalContent }: { switchSelect: SwitchSelectMode, setModalContent: React.Dispatch<React.SetStateAction<ModalContent | null>> }) {
-  const [levels, setLevels] = useState<ILevel[]>([])
+export default function AdminTableLevels({ switchSelect, setSwitchSelect }: { switchSelect: SwitchSelectMode | null, setSwitchSelect: React.Dispatch<React.SetStateAction<SwitchSelectMode | null>> }) {
+  const [levels, setLevels] = useState<ILevel[]>([]);
+  const [maxPages, setMaxPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
+  const [modalContent, setModalContent] = useState<ModalContentType | null>(null);
+  const [selectedKeys, setSelectedKeys] = useState<any>(new Set([]))
+  const [reload, setReload] = useState<number>(0);
+  const [countLevels, setCountLevels] = useState<number>(0)
+  const { onOpenChange, isOpen, onClose } = useDisclosure();
 
-  async function HandleAction(e: any) {
+  async function HandleUpdateAction(e: any) {
     if (switchSelect === SwitchSelectMode.single) {
-      setModalContent(await AdminModalUpdateContext(e))
+      setModalContent(await AdminModalUpdateContext(e, onClose))
     }
   }
   async function HandleDeleteAction(e: MouseEvent, selectedKeys: Set<string>) {
-    setModalContent(await AdminModalDeleteContext(Array.from(selectedKeys)))
+    setModalContent(await AdminModalDeleteContext(Array.from(selectedKeys), onClose))
+  }
+  async function HandleAddAction() {
+    setModalContent(AdminModalAddContext(onClose))
   }
 
   function RenderList(item: ILevel) {
@@ -39,18 +51,65 @@ export default function AdminTableLevels({ switchSelect, setModalContent }: { sw
       </TableRow>
     )
   }
+
   useEffect(() => {
-    FetchLevels().then(lvl => {
+    setIsLoading(true);
+    GetLevelByPage(page).then(lvl => {
       if (lvl) {
-        setLevels(lvl);
+        setLevels(lvl.docs);
+        setMaxPages(lvl.maxPages);
+        setCountLevels(lvl.countDocs);
         setIsLoading(false);
       }
     })
-  }, [])
-  const [selectedKeys, setSelectedKeys] = useState<any>(new Set([]))
+  }, [page, reload])
+  useEffect(() => {
+    if (modalContent) {
+      onOpenChange();
+    }
+  }, [modalContent])
+  useEffect(() => {
+    if (!isOpen) {
+      setReload(Math.random())
+    }
+  }, [isOpen])
+  useEffect(() => {
+    if (switchSelect === SwitchSelectMode.none) {
+      HandleAddAction()
+      setSwitchSelect(null)
+    }
+  }, [switchSelect])
   return (
     <>
-      <Table className=" max-h-[230px]" selectionBehavior="replace" selectedKeys={selectedKeys} onSelectionChange={setSelectedKeys} onRowAction={HandleAction} aria-label="collection table" selectionMode={switchSelect}>
+      <Modal onOpenChange={onOpenChange} isOpen={isOpen}>
+        <ModalContent>
+          <ModalHeader>
+            {modalContent?.header}
+          </ModalHeader>
+          <ModalBody>
+            {modalContent?.body}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      <Table
+        topContent={
+          <p className=' text-right text-sm text-[rgba(255,255,255,0.5)]'>Total levels: {countLevels}</p>
+        }
+        bottomContent={
+          levels.length > 0 ? (
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="primary"
+                page={page}
+                total={maxPages}
+                onChange={(page) => setPage(page)}
+              />
+            </div>
+          ) : null
+        } selectionBehavior="replace" selectedKeys={selectedKeys} onSelectionChange={setSelectedKeys} onRowAction={HandleUpdateAction} aria-label="collection table" selectionMode={switchSelect as SwitchSelectMode}>
         <TableHeader>
           <TableColumn>Level Position</TableColumn>
           <TableColumn>Level Name</TableColumn>
@@ -59,10 +118,11 @@ export default function AdminTableLevels({ switchSelect, setModalContent }: { sw
         <TableBody items={levels} isLoading={isLoading} loadingContent={<Spinner color="primary" />} emptyContent="There are no levels">
           {RenderList}
         </TableBody>
-      </Table>
+      </Table >
       {switchSelect === SwitchSelectMode.multiple && <Button isDisabled={Array.from(selectedKeys).length == 0} variant="solid" onClick={(e) => { HandleDeleteAction(e, selectedKeys) }} size='sm' className='mt-4' startContent={<TrashIcon fill='currentColor' />} color='danger'>
         Delete
-      </Button>}
+      </Button>
+      }
     </>
   )
 }

@@ -36,6 +36,7 @@ export class LevelsService {
 
     return {
       maxPages,
+      countDocs,
       docs,
     };
   }

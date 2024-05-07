@@ -16,12 +16,15 @@ async function HandleAddSubmit(e: FormEvent) {
   )
 }
 
-export const AdminModalAddContext = (): ModalContent => {
+export const AdminModalAddContext = (onClose: () => void): ModalContent => {
   return {
 
     header: <span className='flex gap-2'><NewIcon fill='#44ff44' width="29px" height="29px" /><h1>Create level</h1></span>,
     body:
-      <form action="/api/levels/create" method='POST' onSubmit={HandleAddSubmit} className='grid gap-2'>
+      <form action="/api/levels/create" method='POST' onSubmit={async (e) => {
+        await HandleAddSubmit(e);
+        onClose();
+      }} className='grid gap-2'>
         <Input variant="bordered" label="Level name" name="LevelName" isRequired />
         <Autocomplete
           isRequired
@@ -48,19 +51,22 @@ export const AdminModalAddContext = (): ModalContent => {
       </form>
   }
 }
-export const AdminModalDeleteContext = async (ids: string[]): Promise<ModalContent> => {
+export const AdminModalDeleteContext = async (ids: string[], onClose: () => void): Promise<ModalContent> => {
   async function HandleDeleteSubmit(e: FormEvent) {
     e.preventDefault();
     await DeleteLevels(ids);
   }
   return {
     header: <span className='flex gap-2 '><DeleteIcon fill='#dc2626' width="28px" height="28px" /><h1>Delete levels</h1></span>,
-    body: <form className='flex justify-center' action="/api/levels/create" method='delete' onSubmit={HandleDeleteSubmit}>
+    body: <form className='flex justify-center' action="/api/levels/create" method='delete' onSubmit={async (e) => {
+      await HandleDeleteSubmit(e)
+      onClose()
+    }}>
       <Button color='danger' variant='solid' type="submit">Confirm</Button>
     </form>
   }
 }
-export const AdminModalUpdateContext = async (id: string): Promise<ModalContent> => {
+export const AdminModalUpdateContext = async (id: string, onClose: () => void): Promise<ModalContent> => {
   const level = await GetLevelById(id);
   async function HandleUpdateSubmit(e: FormEvent) {
     e.preventDefault();
@@ -71,7 +77,10 @@ export const AdminModalUpdateContext = async (id: string): Promise<ModalContent>
   return {
     header: <span className='flex gap-2 '><UpgradeIcon fill='#aa44bb' width="28px" height="28px" /><h1>Update level</h1></span>,
     body:
-      <form action="/api/levels/create" method='POST' onSubmit={HandleUpdateSubmit} className='grid gap-2'>
+      <form action="/api/levels/create" method='POST' onSubmit={async (e) => {
+        HandleUpdateSubmit(e);
+        onClose()
+      }} className='grid gap-2'>
         <Input defaultValue={level?.LevelName} variant="bordered" label="Level name" name="LevelName" />
         <Autocomplete
           label="Level difficulty"
