@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { LevelsService } from './levels.service';
 import { CreateLevelDto } from './dto/create-level.dto';
@@ -27,8 +28,13 @@ export class LevelsController {
     return this.levelsService.findAll();
   }
   @Get('page/:page')
-  findByPage(@Param('page') page: string, @Query('max') maxDocs: string) {
-    return this.levelsService.findByPage(+page, +maxDocs);
+  findByPage(
+    @Param('page') page: string,
+    @Query('max') maxDocs: string,
+    @Query('q') q: string,
+    @Query('diff') diff: string,
+  ) {
+    return this.levelsService.findByPage(+page, +maxDocs, q, diff);
   }
 
   @Get('level/:id')

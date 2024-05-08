@@ -19,7 +19,7 @@ export const LevelsDifficulty = [
 ]
 
 
-export default function AdminTableLevels({ switchSelect, setSwitchSelect }: { switchSelect: SwitchSelectMode | null, setSwitchSelect: React.Dispatch<React.SetStateAction<SwitchSelectMode | null>> }) {
+export default function AdminTableLevels({ switchSelect, setSwitchSelect, diff }: { diff: number, switchSelect: SwitchSelectMode | null, setSwitchSelect: React.Dispatch<React.SetStateAction<SwitchSelectMode | null>> }) {
   const [levels, setLevels] = useState<ILevel[]>([]);
   const [maxPages, setMaxPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -72,7 +72,7 @@ export default function AdminTableLevels({ switchSelect, setSwitchSelect }: { sw
     if (!isOpen) {
       setReload(Math.random())
     }
-  }, [isOpen])
+  }, [isOpen, diff])
   useEffect(() => {
     if (switchSelect === SwitchSelectMode.none) {
       HandleAddAction()
@@ -102,7 +102,7 @@ export default function AdminTableLevels({ switchSelect, setSwitchSelect }: { sw
                 isCompact
                 showControls
                 showShadow
-                color="primary"
+                color="default"
                 page={page}
                 total={maxPages}
                 onChange={(page) => setPage(page)}

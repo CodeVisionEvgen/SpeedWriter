@@ -23,14 +23,28 @@ export class LevelsService {
     return this.levelModel.find();
   }
 
-  async findByPage(page: number = 1, maxDocs: number = 5) {
+  async findByPage(
+    page: number = 1,
+    maxDocs: number = 5,
+    q: string = '',
+    diff: string = '',
+  ) {
     const countDocs = await this.levelModel.find().countDocuments();
     const maxPages = Math.ceil(countDocs / maxDocs);
     const skip = (page - 1) * maxDocs;
     const docs = await this.levelModel
       .aggregate()
-      .match({})
-      .sort({ _id: 1 })
+      .match({
+        LevelName: {
+          $regex: q,
+          $options: 'i',
+        },
+        LevelDifficulty: {
+          $regex: diff,
+          $options: 'i',
+        },
+      })
+      .sort({ LevelPosition: -1 })
       .skip(skip)
       .limit(maxDocs);
 

@@ -5,9 +5,11 @@ export async function FetchLevels(): Promise<ILevel[]> {
   return data as Promise<ILevel[]>;
 }
 export async function GetLevelByPage(
-  page: number
+  page: number = 1,
+  diff: string = ""
 ): Promise<GetLevelsByPageType> {
-  const data = (await axios(`/api/levels/page/${page}?max=8`)).data;
+  const data = (await axios(`/api/levels/page/${page}?max=8&diff=${diff}`))
+    .data;
   return data as Promise<GetLevelsByPageType>;
 }
 export async function GetLevelById(id: string): Promise<ILevel> {

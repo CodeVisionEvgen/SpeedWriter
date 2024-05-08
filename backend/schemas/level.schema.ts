@@ -22,10 +22,12 @@ export class Level {
   @Prop({
     type: String,
     required: true,
+    index: 'text',
   })
   LevelName: string;
   @Prop({
     required: true,
+    index: 'text',
     enum: LevelDifficultyEnums,
   })
   LevelDifficulty: LevelDifficultyEnums;
