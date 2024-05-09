@@ -29,10 +29,8 @@ export class LevelsService {
     q: string = '',
     diff: string = '',
   ) {
-    const countDocs = await this.levelModel.find().countDocuments();
-    const maxPages = Math.ceil(countDocs / maxDocs);
     const skip = (page - 1) * maxDocs;
-    const docs = await this.levelModel
+    const docs = this.levelModel
       .aggregate()
       .match({
         LevelName: {
@@ -44,14 +42,12 @@ export class LevelsService {
           $options: 'i',
         },
       })
-      .sort({ LevelPosition: -1 })
-      .skip(skip)
-      .limit(maxDocs);
-
+      .sort({ LevelPosition: -1 });
+    const docCount = (await docs).length;
     return {
-      maxPages,
-      countDocs,
-      docs,
+      maxPages: Math.ceil(docCount / maxDocs),
+      countDocs: docCount,
+      docs: await docs.skip(skip).limit(maxDocs),
     };
   }
 

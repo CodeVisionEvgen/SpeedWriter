@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
   Query,
-  ParseIntPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { LevelsService } from './levels.service';
 import { CreateLevelDto } from './dto/create-level.dto';
@@ -19,6 +19,7 @@ export class LevelsController {
   constructor(private readonly levelsService: LevelsService) {}
 
   @Post()
+  @UsePipes()
   create(@Body() createLevelDto: CreateLevelDto) {
     return this.levelsService.create(createLevelDto);
   }

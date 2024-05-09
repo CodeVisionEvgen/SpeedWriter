@@ -6,7 +6,7 @@ import { Spacer } from "@nextui-org/spacer";
 import { motion as Motion } from "framer-motion"
 import AdminTableLevels from '@/components/admin/table';
 import Section from '@/components/Section';
-import { SwitchSelectMode } from '@/types';
+import { RequestArgsType, SwitchSelectMode } from '@/types';
 import SearchInput from '@/components/search';
 const MonitionVariants = {
   show: {
@@ -29,8 +29,12 @@ export default function Page() {
   const [isActiveUpdate, setIsActiveUpdate] = useState<boolean>(false);
   const [isActiveDelete, setIsActiveDelete] = useState<boolean>(false);
   // const [updateTable, setUpdateTable] = useState<boolean>(false);
-  const [diff, setDiff] = useState<number>(0);
+  const [reload, setReload] = useState<number>(0);
   const [switchSelect, setSwitchSelect] = useState<SwitchSelectMode | null>(null);
+  const [requestArgs, setRequestArgs] = useState<RequestArgsType>({
+    diff: "every",
+    query: "",
+  })
 
 
   function HandleUpdateAction() {
@@ -64,7 +68,7 @@ export default function Page() {
         <span className='flex justify-between w-full'>
           <h3 className=' text-xl text-gray-500'>All levels</h3>
           <div className="flex gap-4">
-            <SearchInput diff={diff} setDiff={setDiff} />
+            <SearchInput setReload={setReload} requestArgs={requestArgs} setRequestArgs={setRequestArgs} />
             <ButtonGroup>
               <Button onClick={HandleAddAction} size='sm' variant="faded" color="success" className='svgBtn'>
                 <Motion.div className='flex items-center gap-2' variants={MonitionVariants} animate={'show'} initial="hide">
@@ -88,7 +92,7 @@ export default function Page() {
           </div>
         </span>
         <Spacer y={10} />
-        <AdminTableLevels switchSelect={switchSelect} setSwitchSelect={setSwitchSelect} diff={diff} />
+        <AdminTableLevels requestArgs={requestArgs} switchSelect={switchSelect} setSwitchSelect={setSwitchSelect} reload={reload} setReload={setReload} />
       </Section>
     </>
   )

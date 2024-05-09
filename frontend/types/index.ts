@@ -6,6 +6,11 @@ export enum LevelDifficultyEmuns {
   Hard = "hard",
 }
 
+export type RequestArgsType = {
+  diff: LevelDifficultyEmuns | "every";
+  query: string;
+};
+
 export type GetLevelsByPageType = {
   maxPages: number;
   countDocs: number;

@@ -1,10 +1,10 @@
 "use client"
 import { GetLevelByPage } from '@/app/actions/Levels';
-import { ILevel } from '@/types';
+import { ILevel, LevelDifficultyEmuns } from '@/types';
 import { Chip } from '@nextui-org/chip';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table'
 import { Spinner } from "@nextui-org/spinner"
-import { MouseEvent, useEffect, useState } from 'react'
+import React, { MouseEvent, useEffect, useState } from 'react'
 import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/modal';
 import { Button } from '@nextui-org/button';
 import { TrashIcon } from '../icons';
@@ -19,14 +19,24 @@ export const LevelsDifficulty = [
 ]
 
 
-export default function AdminTableLevels({ switchSelect, setSwitchSelect, diff }: { diff: number, switchSelect: SwitchSelectMode | null, setSwitchSelect: React.Dispatch<React.SetStateAction<SwitchSelectMode | null>> }) {
+export default function AdminTableLevels({ switchSelect, setSwitchSelect, reload, setReload, requestArgs = {
+  diff: "every",
+  query: "",
+} }:
+  {
+    requestArgs: {
+      diff: LevelDifficultyEmuns | "every",
+      query: string,
+    }
+    reload: number, setReload: React.Dispatch<React.SetStateAction<number>>, switchSelect: SwitchSelectMode | null,
+    setSwitchSelect: React.Dispatch<React.SetStateAction<SwitchSelectMode | null>>
+  }) {
   const [levels, setLevels] = useState<ILevel[]>([]);
   const [maxPages, setMaxPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [modalContent, setModalContent] = useState<ModalContentType | null>(null);
   const [selectedKeys, setSelectedKeys] = useState<any>(new Set([]))
-  const [reload, setReload] = useState<number>(0);
   const [countLevels, setCountLevels] = useState<number>(0)
   const { onOpenChange, isOpen, onClose } = useDisclosure();
 
@@ -54,7 +64,7 @@ export default function AdminTableLevels({ switchSelect, setSwitchSelect, diff }
 
   useEffect(() => {
     setIsLoading(true);
-    GetLevelByPage(page).then(lvl => {
+    GetLevelByPage(page, requestArgs.diff, requestArgs.query).then(lvl => {
       if (lvl) {
         setLevels(lvl.docs);
         setMaxPages(lvl.maxPages);
@@ -72,7 +82,7 @@ export default function AdminTableLevels({ switchSelect, setSwitchSelect, diff }
     if (!isOpen) {
       setReload(Math.random())
     }
-  }, [isOpen, diff])
+  }, [isOpen])
   useEffect(() => {
     if (switchSelect === SwitchSelectMode.none) {
       HandleAddAction()
