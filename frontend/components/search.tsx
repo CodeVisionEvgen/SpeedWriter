@@ -31,6 +31,6 @@ export default function SearchInput({ setReload, setRequestArgs, requestArgs }: 
         </DropdownMenu>
       </Dropdown >
 
-    } type='search' size='sm' color="default" variant="flat" placeholder='Search...' className='w-max' startContent={< SearchIcon fill="#555555" />} />
+    } type='search' color="default" variant="flat" placeholder='Search...' className='w-max' startContent={< SearchIcon fill="#555555" />} />
   )
 }

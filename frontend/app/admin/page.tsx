@@ -67,7 +67,7 @@ export default function Page() {
       <Section>
         <span className='flex justify-between w-full'>
           <h3 className=' text-xl text-gray-500'>All levels</h3>
-          <div className="flex gap-4">
+          <div className="flex w-[88%] justify-between">
             <SearchInput setReload={setReload} requestArgs={requestArgs} setRequestArgs={setRequestArgs} />
             <ButtonGroup>
               <Button onClick={HandleAddAction} size='sm' variant="faded" color="success" className='svgBtn'>

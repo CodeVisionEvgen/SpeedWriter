@@ -2,9 +2,9 @@ import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Providers } from "./providers";
 import Navbar from "@/components/navbar";
-import gradient from "@/public/layout/gradient.png"
 import clsx from "clsx";
-import Image from "next/image";
+import Gradient from "@/components/gradient";
+
 
 export const metadata: Metadata = {
 	title: {
@@ -42,7 +42,7 @@ export default function RootLayout({
 					<div className="relative flex flex-col h-screen">
 						<Navbar />
 						<main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
-							<Image src={gradient} width={2200} height={800} className="z-0 absolute rotate-90 top-0 left-0" alt="gradient" />
+							<Gradient />
 							{children}
 						</main>
 						<footer className="w-full flex items-center justify-center py-3">
