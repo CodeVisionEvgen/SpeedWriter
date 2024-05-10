@@ -6,6 +6,8 @@ import { Link } from "@nextui-org/link";
 import { Button } from "@nextui-org/button";
 import { useState } from "react";
 import Image from "next/image";
+import { AuthWithGoogleBtn } from "@/components/ui/btns";
+import { Spacer } from "@nextui-org/spacer";
 export default function App() {
   const [selected, setSelected] = useState("login");
   return (
@@ -16,9 +18,9 @@ export default function App() {
             <Image src={"/favicon.ico"} alt="logo" width={70} height={70} />
           </div>
           <Tabs
-            placement="bottom"
-            color="default"
-            variant="light"
+            // placement="bottom"
+            color="primary"
+            variant="underlined"
             classNames={{
               cursor: " bg-[#292929]"
             }}
@@ -61,7 +63,8 @@ export default function App() {
               </form>
             </Tab>
           </Tabs>
-          <div>Continue with google</div>
+          <Spacer y={9} />
+          <AuthWithGoogleBtn cb={() => { return 1 }} />
         </CardBody>
       </Card>
     </div >

@@ -23,7 +23,6 @@ export class LevelsController {
   create(@Body() createLevelDto: CreateLevelDto) {
     return this.levelsService.create(createLevelDto);
   }
-
   @Get()
   findAll() {
     return this.levelsService.findAll();
@@ -47,7 +46,6 @@ export class LevelsController {
   update(@Param('id') id: string, @Body() updateLevelDto: UpdateLevelDto) {
     return this.levelsService.update(id, updateLevelDto);
   }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.levelsService.remove(id);
