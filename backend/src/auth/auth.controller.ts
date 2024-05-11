@@ -8,6 +8,7 @@ import {
   ParseFilePipe,
   Post,
   Req,
+  UnauthorizedException,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -59,13 +60,29 @@ export class AuthController {
     }
 
     try {
-      await this.avatarApiService.SaveAvatar(userPicture);
+      userPicture = (await this.avatarApiService.SaveAvatar(userPicture)).url;
     } catch (error) {
       throw new BadGatewayException('Failed to save avatar');
     }
 
+    Promise.all([
+      await new Promise((rej, res) => {
+        this.userService.findByEmail(createUserDto.UserEmail)
+          ? res(1)
+          : rej(new Error('User is exists'));
+      }),
+      await new Promise((rej, res) => {
+        createUserDto.UserPassword.length > 7 &&
+        createUserDto.UserPassword.length < 20
+          ? res(1)
+          : rej('Password must have 8-20 letters.');
+      }),
+    ]).catch((err) => {
+      throw new UnauthorizedException(`Failed to signup.\nError: ${err}`);
+    });
+
     return this.userService.create({
-      UserPictire: userPicture,
+      UserPicture: userPicture,
       ...createUserDto,
     });
   }

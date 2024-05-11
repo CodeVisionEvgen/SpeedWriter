@@ -22,6 +22,10 @@ export class User {
     type: String,
     required: true,
   })
+  @Prop({
+    type: String,
+    required: true,
+  })
   UserPicture: string;
 }
 
