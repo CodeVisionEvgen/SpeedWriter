@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import mongoConf from 'configs/mongo.conf';
 import { GoogleStrategy } from 'strategies/google.strategy';
 import { UserModule } from './user/user.module';
+import { AvatarApiModule } from './avatar-api/avatar-api.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UserModule } from './user/user.module';
     }),
     AuthModule,
     UserModule,
+    AvatarApiModule,
   ],
   controllers: [],
   providers: [GoogleStrategy],

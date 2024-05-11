@@ -1,10 +1,8 @@
-import { Button } from "@nextui-org/button"
-import Image from "next/image"
+import { Button, ButtonProps } from "@nextui-org/button"
 import { GoogleColorIcon } from "../icons"
 
-
-export const AuthWithGoogleBtn = (cb: any) => {
+export const AuthWithGoogleBtn = (props: ButtonProps) => {
   return (
-    <Button onClick={cb} className=" bg-white text-gray-500" startContent={<GoogleColorIcon />}>Login with Google</Button>
+    <Button className=" bg-white text-gray-500" startContent={<GoogleColorIcon />} {...props}>Login with Google</Button>
   )
 }

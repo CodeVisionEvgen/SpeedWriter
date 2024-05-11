@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { FileRequestType } from 'types/file.type';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto & { UserPictire: FileRequestType }) {
-    console.log(createUserDto);
+  create(createUserDto: CreateUserDto & { UserPictire: string }) {
     return 'This action adds a new user';
   }
 
@@ -19,7 +17,6 @@ export class UserService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    console.log(updateUserDto);
     return `This action updates a #${id} user`;
   }
 

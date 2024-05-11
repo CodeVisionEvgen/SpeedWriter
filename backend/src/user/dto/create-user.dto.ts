@@ -5,6 +5,4 @@ export class CreateUserDto {
   UserName: string;
   @IsEmail()
   UserEmail: string;
-  // @IsDataURI()
-  // UserPicture: any;
 }

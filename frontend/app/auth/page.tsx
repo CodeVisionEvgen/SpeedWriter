@@ -8,8 +8,11 @@ import { useState } from "react";
 import Image from "next/image";
 import { AuthWithGoogleBtn } from "@/components/ui/btns";
 import { Spacer } from "@nextui-org/spacer";
+import { FileImageInput } from "@/components/ui/inputs";
+import { useRouter } from "next/navigation";
 export default function App() {
   const [selected, setSelected] = useState("login");
+  const router = useRouter();
   return (
     <div className="flex w-full h-[50vh] justify-center">
       <Card className="max-w-full w-[340px] h-max">
@@ -39,6 +42,8 @@ export default function App() {
                   label="Password"
                   placeholder="Enter your password"
                   type="password" />
+                <FileImageInput />
+
                 <div className="flex gap-2 justify-end">
                   <Button fullWidth color="default">
                     Login
@@ -55,6 +60,7 @@ export default function App() {
                   label="Password"
                   placeholder="Enter your password"
                   type="password" />
+                <FileImageInput />
                 <div className="flex gap-2 justify-end">
                   <Button fullWidth color="default">
                     Sign up
@@ -64,7 +70,9 @@ export default function App() {
             </Tab>
           </Tabs>
           <Spacer y={9} />
-          <AuthWithGoogleBtn cb={() => { return 1 }} />
+          <AuthWithGoogleBtn onClick={() => {
+            router.replace('/api/auth/google/callback')
+          }} />
         </CardBody>
       </Card>
     </div >
