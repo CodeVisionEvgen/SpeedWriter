@@ -19,8 +19,12 @@ export class UserService {
     return new this.userModel(createUserDto).save();
   }
 
+  findById(_id: string) {
+    return this.userModel.findById(_id);
+  }
+
   findByProviderAndName(name: string, provider: string) {
-    return this.userModel.aggregate().match({
+    return this.userModel.findOne({
       UserProvider: provider,
       UserName: name,
     });

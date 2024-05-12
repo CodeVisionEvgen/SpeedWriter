@@ -3,7 +3,7 @@ import { LevelsModule } from './levels/levels.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import mongoConf from 'configs/mongo.conf';
+import { MongoConfig } from 'configs/mongo.conf';
 import { GoogleStrategy } from 'src/auth/strategies/google.strategy';
 import { UserModule } from './user/user.module';
 import { AvatarApiModule } from './avatar-api/avatar-api.module';
@@ -17,16 +17,13 @@ import { AvatarApiModule } from './avatar-api/avatar-api.module';
     LevelsModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        return mongoConf(configService);
-      },
+      useFactory: MongoConfig,
       inject: [ConfigService],
     }),
     AuthModule,
     UserModule,
     AvatarApiModule,
   ],
-  controllers: [],
   providers: [GoogleStrategy],
 })
 export class AppModule {}

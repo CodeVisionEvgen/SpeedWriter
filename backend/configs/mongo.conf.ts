@@ -1,7 +1,9 @@
 import { ConfigService } from '@nestjs/config';
 import { MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 
-export default (configService: ConfigService): MongooseModuleFactoryOptions => {
+export const MongoConfig = (
+  configService: ConfigService,
+): MongooseModuleFactoryOptions => {
   return {
     uri:
       configService.get('MONGODB_URI') +

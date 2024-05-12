@@ -8,11 +8,13 @@ import {
   Delete,
   Query,
   UsePipes,
+  UseGuards,
 } from '@nestjs/common';
 import { LevelsService } from './levels.service';
 import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
 import { IsObjectIdPipe } from 'nestjs-object-id';
+import { JwtGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('levels')
 export class LevelsController {
@@ -23,6 +25,8 @@ export class LevelsController {
   create(@Body() createLevelDto: CreateLevelDto) {
     return this.levelsService.create(createLevelDto);
   }
+
+  @UseGuards(JwtGuard)
   @Get()
   findAll() {
     return this.levelsService.findAll();

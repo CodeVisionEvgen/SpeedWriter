@@ -5,7 +5,6 @@ import {
   Controller,
   FileTypeValidator,
   Get,
-  HttpCode,
   ParseFilePipe,
   Post,
   Req,
@@ -22,7 +21,9 @@ import { FileRequestType } from 'types/file.type';
 import { UserService } from 'src/user/user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AvatarApiService } from 'src/avatar-api/avatar-api.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
+import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
+import { ExtractJwt } from 'passport-jwt';
 
 @Controller('auth')
 export class AuthController {
@@ -38,10 +39,53 @@ export class AuthController {
     return req.user;
   }
 
-  @HttpCode(200)
+  @UseGuards(JwtRefreshGuard)
+  @Post('refresh')
+  async refresh(@Req() req: Request, @Res() response: Response) {
+    const refToken = ExtractJwt.fromExtractors([
+      (request) => {
+        return request.cookies['RefreshToken'];
+      },
+    ])(req);
+    if (!refToken) throw new UnauthorizedException('Token is not set');
+
+    const { refreshToken: tokenFromDb } =
+      await this.authService.findJwt(refToken);
+    if (!tokenFromDb) throw new UnauthorizedException('Token is not exists');
+
+    const { _id } = (await this.authService.jwtDecode(tokenFromDb)) as {
+      _id: string;
+    };
+
+    const user = await this.userService.findById(_id);
+    if (!user) throw new UnauthorizedException('User is not exists');
+
+    const tokens = await this.authService.genJwtTokens(
+      {
+        UserEmail: user.UserEmail,
+        UserName: user.UserName,
+        UserPicture: user.UserPicture,
+      },
+      user._id.toString(),
+    );
+
+    await this.authService.saveJwtTokens(tokens);
+    await this.authService.deleteJwt(tokenFromDb);
+
+    response.cookie('AccessToken', tokens.accessToken, { httpOnly: true });
+    response.cookie('RefreshToken', tokens.refreshToken, {
+      httpOnly: true,
+    });
+
+    response.status(201).json(tokens);
+  }
+
   @Post('signin')
-  async signin(@Body() body: CreateUserDto) {
-    const user = await this.userService.findByName(body.UserName);
+  async signin(@Body() body: CreateUserDto, @Res() response: Response) {
+    const user = await this.userService.findByProviderAndName(
+      body.UserName,
+      'jwt',
+    );
     if (!user) throw new BadRequestException('User is not exist');
     if (
       !(await this.authService.comparePasswords(
@@ -50,6 +94,21 @@ export class AuthController {
       ))
     )
       throw new UnauthorizedException('Password is wrong');
+    const tokens = await this.authService.genJwtTokens(
+      {
+        UserPicture: user.UserPicture,
+        UserEmail: user.UserEmail,
+        UserName: user.UserName,
+      },
+      user._id.toString(),
+    );
+
+    response.cookie('AccessToken', tokens.accessToken, { httpOnly: true });
+    response.cookie('RefreshToken', tokens.refreshToken, {
+      httpOnly: true,
+    });
+
+    response.status(200).json(tokens);
   }
 
   @UseInterceptors(FileInterceptor('UserPicture'))

@@ -9,10 +9,12 @@ import { JwtConfigFactory } from 'configs/jwt.conf';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JWT, JWTSchema } from 'src/schemas/jwt.schema';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, AvatarApiService],
+  providers: [JwtRefreshStrategy, AuthService, AvatarApiService],
+  exports: [AuthService],
   imports: [
     UserModule,
     AvatarApiModule,

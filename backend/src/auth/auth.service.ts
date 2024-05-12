@@ -35,18 +35,26 @@ export class AuthService {
     return this.jwtService.verify(token);
   }
 
+  findJwt(refreshToken: string) {
+    return this.jwtModel.findOne({ refreshToken });
+  }
+
+  deleteJwt(refreshToken: string) {
+    return this.jwtModel.deleteOne({ refreshToken });
+  }
+
   async genJwtTokens(
     AccessPayload: Omit<User, 'UserPassword' | 'UserProvider'>,
     RefreshPayload: string,
   ): Promise<JwtType> {
     return {
       accessToken: await this.jwtService.signAsync(AccessPayload, {
-        expiresIn: '1d',
+        expiresIn: '2h',
       }),
       refreshToken: await this.jwtService.signAsync(
         { _id: RefreshPayload },
         {
-          expiresIn: '7d',
+          expiresIn: '3d',
         },
       ),
     };
