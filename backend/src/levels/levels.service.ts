@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
 import { Model } from 'mongoose';
-import { Level } from 'schemas/level.schema';
+import { Level } from 'src/schemas/level.schema';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()

@@ -43,7 +43,6 @@ export default function App() {
                   placeholder="Enter your password"
                   type="password" />
                 <FileImageInput />
-
                 <div className="flex gap-2 justify-end">
                   <Button fullWidth color="default">
                     Login

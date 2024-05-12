@@ -1,5 +1,5 @@
 import { IsEnum, IsString } from 'class-validator';
-import { LevelDifficultyEnums } from 'schemas/level.schema';
+import { LevelDifficultyEnums } from 'src/schemas/level.schema';
 
 export class CreateLevelDto {
   @IsString()
