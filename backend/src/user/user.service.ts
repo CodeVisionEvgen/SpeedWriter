@@ -26,7 +26,7 @@ export class UserService {
   findByProviderAndEmail(email: string, provider: string) {
     return this.userModel.findOne({
       UserProvider: provider,
-      UserName: email,
+      UserEmail: email,
     });
   }
 

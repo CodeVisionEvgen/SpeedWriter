@@ -74,7 +74,6 @@ export class AuthController {
     }
 
     await this.authService.saveJwtTokens(tokens);
-    console.log(this.configService.get('FRONT_DOMAIN'));
     response.cookie('AccessToken', tokens.accessToken, {
       httpOnly: true,
       domain: this.configService.get('FRONT_DOMAIN'),
@@ -88,7 +87,14 @@ export class AuthController {
   }
 
   @Get('logout')
-  logout(@Res() res: Response) {
+  async logout(@Req() req: Request, @Res() res: Response) {
+    const refToken = ExtractJwt.fromExtractors([
+      (request) => {
+        return request.cookies['RefreshToken'];
+      },
+    ])(req);
+    await this.authService.deleteJwt(refToken);
+    res.clearCookie('token');
     res.clearCookie('AccessToken');
     res.clearCookie('RefreshToken');
     res.json({ ok: 1 });
@@ -137,8 +143,8 @@ export class AuthController {
 
   @Post('signin')
   async signin(@Body() body: CreateUserDto, @Res() response: Response) {
-    const user = await this.userService.findByProviderAndName(
-      body.UserName,
+    const user = await this.userService.findByProviderAndEmail(
+      body.UserEmail,
       'jwt',
     );
     if (!user) throw new BadRequestException('User is not exist');
@@ -157,6 +163,7 @@ export class AuthController {
       },
       user._id.toString(),
     );
+    await this.authService.saveJwtTokens(tokens);
 
     response.cookie('AccessToken', tokens.accessToken, { httpOnly: true });
     response.cookie('RefreshToken', tokens.refreshToken, {
