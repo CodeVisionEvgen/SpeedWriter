@@ -24,6 +24,9 @@ import { AvatarApiService } from 'src/avatar-api/avatar-api.service';
 import { Request, Response } from 'express';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { ExtractJwt } from 'passport-jwt';
+import { UserType } from 'types/user.type';
+import { JwtType } from 'types/jwt.type';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
@@ -31,12 +34,57 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly avatarApiService: AvatarApiService,
+    private readonly configService: ConfigService,
   ) {}
   @UseGuards(GoogleOauthGuard)
   @Get('google/callback')
-  googleCallback(@Req() req: Request & { user: any }) {
-    console.log(req.user);
-    return req.user;
+  async googleCallback(
+    @Req()
+    req: Request & {
+      user: UserType;
+    },
+    @Res() response: Response,
+  ) {
+    const { user } = req;
+
+    const UserInDB = await this.userService.findByEmail(user.UserEmail);
+    let tokens: JwtType | undefined;
+    if (!UserInDB) {
+      const newUser = await this.userService.create({
+        ...user,
+        UserProvider: 'google',
+      });
+      tokens = await this.authService.genJwtTokens(
+        {
+          UserName: newUser.UserName,
+          UserEmail: newUser.UserEmail,
+          UserPicture: newUser.UserPicture,
+        },
+        newUser._id.toString(),
+      );
+    } else {
+      tokens = await this.authService.genJwtTokens(
+        {
+          UserName: UserInDB.UserName,
+          UserEmail: UserInDB.UserEmail,
+          UserPicture: UserInDB.UserPicture,
+        },
+        UserInDB._id.toString(),
+      );
+    }
+
+    await this.authService.saveJwtTokens(tokens);
+    console.log(this.configService.get('FRONT_DOMAIN'));
+    response.cookie('AccessToken', tokens.accessToken, {
+      httpOnly: true,
+      domain: this.configService.get('FRONT_DOMAIN'),
+    });
+    response.cookie('RefreshToken', tokens.refreshToken, {
+      domain: this.configService.get('FRONT_DOMAIN'),
+      httpOnly: true,
+    });
+
+    response.status(201).redirect(this.configService.get('FRONT_URL'));
   }
 
   @UseGuards(JwtRefreshGuard)
@@ -77,7 +125,7 @@ export class AuthController {
       httpOnly: true,
     });
 
-    response.status(201).json(tokens);
+    response.status(201).redirect(this.configService.get('FRONT_URL'));
   }
 
   @Post('signin')
@@ -177,6 +225,6 @@ export class AuthController {
     response.cookie('AccessToken', tokens.accessToken, { httpOnly: true });
     response.cookie('RefreshToken', tokens.refreshToken, { httpOnly: true });
 
-    response.status(201).json(tokens);
+    response.status(201).redirect(this.configService.get('FRONT_URL'));
   }
 }
