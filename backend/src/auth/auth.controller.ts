@@ -87,6 +87,13 @@ export class AuthController {
     response.status(201).redirect(this.configService.get('FRONT_URL'));
   }
 
+  @Get('logout')
+  logout(@Res() res: Response) {
+    res.clearCookie('AccessToken');
+    res.clearCookie('RefreshToken');
+    res.json({ ok: 1 });
+  }
+
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   async refresh(@Req() req: Request, @Res() response: Response) {
