@@ -9,6 +9,7 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@next/env": "^14.2.3",
 		"@nextui-org/accordion": "^2.0.32",
 		"@nextui-org/autocomplete": "^2.0.16",
 		"@nextui-org/avatar": "^2.0.27",

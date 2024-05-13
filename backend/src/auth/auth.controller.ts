@@ -227,4 +227,10 @@ export class AuthController {
 
     response.status(201).redirect(this.configService.get('FRONT_URL'));
   }
+
+  @UseGuards(JwtRefreshGuard)
+  @Post('jwt/decode')
+  decodeJwt(@Req() req: Request) {
+    return this.authService.jwtDecode(req.cookies['token']);
+  }
 }

@@ -44,7 +44,7 @@ export class AuthService {
   }
 
   async genJwtTokens(
-    AccessPayload: Omit<User, 'UserPassword' | 'UserProvider'>,
+    AccessPayload: Omit<User, 'UserPassword' | 'UserProvider' | 'UserRoles'>,
     RefreshPayload: string,
   ): Promise<JwtType> {
     return {

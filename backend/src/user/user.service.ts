@@ -23,6 +23,13 @@ export class UserService {
     return this.userModel.findById(_id);
   }
 
+  findByProviderAndEmail(email: string, provider: string) {
+    return this.userModel.findOne({
+      UserProvider: provider,
+      UserName: email,
+    });
+  }
+
   findByProviderAndName(name: string, provider: string) {
     return this.userModel.findOne({
       UserProvider: provider,

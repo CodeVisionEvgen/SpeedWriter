@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   Query,
-  UsePipes,
   UseGuards,
 } from '@nestjs/common';
 import { LevelsService } from './levels.service';
@@ -15,13 +14,14 @@ import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
 import { IsObjectIdPipe } from 'nestjs-object-id';
 import { JwtGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAdminGuard } from 'src/auth/guards/jwt-admin.guard';
 
 @Controller('levels')
 export class LevelsController {
   constructor(private readonly levelsService: LevelsService) {}
 
   @Post()
-  @UsePipes()
+  @UseGuards(JwtAdminGuard)
   create(@Body() createLevelDto: CreateLevelDto) {
     return this.levelsService.create(createLevelDto);
   }
@@ -46,10 +46,12 @@ export class LevelsController {
     return this.levelsService.findOne(id);
   }
 
+  @UseGuards(JwtAdminGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateLevelDto: UpdateLevelDto) {
     return this.levelsService.update(id, updateLevelDto);
   }
+  @UseGuards(JwtAdminGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.levelsService.remove(id);

@@ -3,3 +3,8 @@ export type UserType = {
   UserEmail: string;
   UserPicture: string;
 };
+
+export enum UserRoles {
+  basic,
+  admin,
+}
