@@ -1,35 +1,60 @@
+import { UserType } from "@/types";
 import axios from "axios";
+import { setCookie } from "cookies-next";
+const config = {
+  withCredentials: true,
+};
+const SwitchMethod = async (
+  url: string,
+  method: "post" | "get" | "patch" | "delete",
+  body?: unknown,
+  userConfig?: any
+) => {
+  let request;
+  switch (method) {
+    case "get":
+      request = await axios.get(url, { ...userConfig, ...config });
+      break;
+    case "post":
+      request = await axios.post(url, body, { ...userConfig, ...config });
+      break;
+    case "delete":
+      request = await axios.delete(url, { ...userConfig, ...config });
+      break;
+    case "patch":
+      request = await axios.patch(url, body, { ...userConfig, ...config });
+  }
+  return request;
+};
 
-export const AxiosWithInterseptor = axios.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+export const RequestFetch = async (
+  url: string,
+  method: "post" | "get" | "patch" | "delete",
+  body?: unknown,
+  userConfig?: any
+) => {
+  try {
+    const response = await SwitchMethod(url, method, body, userConfig);
+    return response;
+  } catch (error: any) {
+    if (error.response.status == 401) {
       try {
-        // Відправка запиту на оновлення токену
-        const response = await axios.post(
-          "/api/auth/refresh",
-          {},
-          {
+        const tokens = (
+          await axios.post("/api/auth/refresh", {
             withCredentials: true,
-          }
-        );
-        const newAccessToken = response.data.AccessToken;
-        console.log(newAccessToken);
-        // Оновлення токену у локальному сховищі (якщо потрібно)
-        // Повторення оригінального запиту з оновленим токеном доступу
-        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-        return axios(originalRequest);
+          })
+        ).data;
+        setCookie("AccessToken", tokens.AccessToken);
+        setCookie("RefreshToken", tokens.RefreshToken);
+        return await SwitchMethod(url, method, body, userConfig);
       } catch (error) {
-        // Обробка помилки оновлення токену
-        // Можливо, перенаправлення на сторінку входу або інша обробка помилки
-        console.error("Token refresh failed:", error);
-        return Promise.reject(error);
+        window.location.href = "/";
       }
     }
-    return Promise.reject(error);
   }
-);
+};
+export const GetUser = async () => {
+  const user = await RequestFetch("/api/auth/jwt/decode", "post");
 
-export const AccountFetch = (url: string) => {};
+  return user?.data as UserType;
+};

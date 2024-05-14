@@ -75,7 +75,7 @@ export class AuthController {
 
     await this.authService.saveJwtTokens(tokens);
     response.cookie('AccessToken', tokens.accessToken, {
-      httpOnly: true,
+      httpOnly: false,
       domain: this.configService.get('FRONT_DOMAIN'),
     });
     response.cookie('RefreshToken', tokens.refreshToken, {
@@ -133,12 +133,12 @@ export class AuthController {
     await this.authService.saveJwtTokens(tokens);
     await this.authService.deleteJwt(tokenFromDb);
 
-    response.cookie('AccessToken', tokens.accessToken, { httpOnly: true });
+    response.cookie('AccessToken', tokens.accessToken, { httpOnly: false });
     response.cookie('RefreshToken', tokens.refreshToken, {
       httpOnly: true,
     });
 
-    response.status(201).redirect(this.configService.get('FRONT_URL'));
+    response.status(201).json(tokens);
   }
 
   @Post('signin')
@@ -165,7 +165,7 @@ export class AuthController {
     );
     await this.authService.saveJwtTokens(tokens);
 
-    response.cookie('AccessToken', tokens.accessToken, { httpOnly: true });
+    response.cookie('AccessToken', tokens.accessToken, { httpOnly: false });
     response.cookie('RefreshToken', tokens.refreshToken, {
       httpOnly: true,
     });
@@ -236,7 +236,7 @@ export class AuthController {
 
     await this.authService.saveJwtTokens(tokens);
 
-    response.cookie('AccessToken', tokens.accessToken, { httpOnly: true });
+    response.cookie('AccessToken', tokens.accessToken, { httpOnly: false });
     response.cookie('RefreshToken', tokens.refreshToken, { httpOnly: true });
 
     response.status(201).redirect(this.configService.get('FRONT_URL'));
@@ -245,6 +245,8 @@ export class AuthController {
   @UseGuards(JwtRefreshGuard)
   @Post('jwt/decode')
   decodeJwt(@Req() req: Request) {
-    return this.authService.jwtDecode(req.cookies['token']);
+    if (req.cookies['token'])
+      return this.authService.jwtDecode(req.cookies['token']);
+    else return this.authService.jwtDecode(req.cookies['AccessToken']);
   }
 }

@@ -67,7 +67,7 @@ export const AdminModalDeleteContext = async (ids: string[], onClose: () => void
   }
 }
 export const AdminModalUpdateContext = async (id: string, onClose: () => void): Promise<ModalContent> => {
-  const level = await GetLevelById(id);
+  const level = (await GetLevelById(id))?.data;
   async function HandleUpdateSubmit(e: FormEvent) {
     e.preventDefault();
     UpdateLevel(id,

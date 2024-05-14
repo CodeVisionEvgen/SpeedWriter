@@ -1,46 +1,52 @@
 import { GetLevelsByPageType, ILevel } from "@/types";
-import axios from "axios";
-export async function FetchLevels(): Promise<ILevel[]> {
-  const data = (await axios("/api/levels")).data;
-  return data as Promise<ILevel[]>;
+import axios, { AxiosResponse } from "axios";
+import { RequestFetch } from "./User";
+export async function FetchLevels(): Promise<
+  AxiosResponse<any, any> | undefined
+> {
+  return RequestFetch("/api/levels", "get");
 }
 export async function GetLevelByPage(
   page: number = 1,
   diff: string = "",
   q: string = ""
-): Promise<GetLevelsByPageType> {
+): Promise<AxiosResponse<any, any> | undefined> {
   const url = `/api/levels/page/${page}?max=8&diff=${
     diff === "every" ? "" : diff
   }&q=${q}`;
-  const data = (await axios(url)).data;
-  return data as Promise<GetLevelsByPageType>;
+  return RequestFetch(url, "get");
 }
-export async function GetLevelById(id: string): Promise<ILevel> {
-  const data = (await axios(`/api/levels/level/${id}`)).data;
-  return data as Promise<ILevel>;
+export async function GetLevelById(
+  id: string
+): Promise<AxiosResponse<any, any> | undefined> {
+  const url = `/api/levels/level/${id}`;
+  return RequestFetch(url, "get");
 }
 export async function CreateLevel(
   level: Pick<ILevel, "LevelDifficulty" | "LevelName" | "LevelText">
-): Promise<ILevel> {
-  const request = await axios.post("/api/levels", level, {
+): Promise<AxiosResponse<any, any> | undefined> {
+  const UserConfig = {
     headers: {
       "Content-Type": "application/json",
     },
-  });
-  return request.data;
+  };
+  const url = "/api/levels";
+  return RequestFetch(url, "post", level, UserConfig);
 }
 export async function UpdateLevel(
   id: string,
   level: Pick<ILevel, "LevelDifficulty" | "LevelName" | "LevelText">
-): Promise<ILevel> {
-  const request = await axios.patch(`/api/levels/${id}`, level, {
+): Promise<AxiosResponse<any, any> | undefined> {
+  const url = `/api/levels/${id}`;
+  return RequestFetch(url, "patch", level, {
     headers: {
       "Content-Type": "application/json",
     },
   });
-  return request.data;
 }
-export async function DeleteLevels(ids: string[]): Promise<ILevel> {
-  const request = await axios.delete(`/api/levels/${ids.join(",")}`);
-  return request.data;
+export async function DeleteLevels(
+  ids: string[]
+): Promise<AxiosResponse<any, any> | undefined> {
+  const url = `/api/levels/${ids.join(",")}`;
+  return RequestFetch(url, "delete");
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from "@/public/favicon.ico"
 import {
 	Navbar,
@@ -20,14 +20,25 @@ import { useRouter } from 'next/navigation';
 import { UserTumb } from './user';
 import { ignoreStackUrlComponents } from "@/consts/ignore";
 import { usePathname } from "next/navigation";
+import { GetUser } from '@/app/actions/User';
+import { UserType } from '@/types';
+import { getCookie } from 'cookies-next';
 
 export default function AppNavbar() {
 	const pathname = usePathname();
 	const router = useRouter();
-
+	const [user, setUser] = useState<UserType | null>(null);
 	function RouterToMainPage() {
 		router.push('/')
 	}
+
+	useEffect(() => {
+		if (getCookie("AccessToken")) {
+			GetUser().then((data: any) => {
+				setUser(data);
+			})
+		}
+	}, [])
 
 	return (
 		<>
@@ -58,17 +69,20 @@ export default function AppNavbar() {
 							</NavbarItem>
 						</NavbarContent>
 						<NavbarContent justify="end">
-							<NavbarItem>
-								<UserTumb src="https://api.dicebear.com/8.x/bottts/svg?seed=Tigger" />
-							</NavbarItem>
-							{/* <NavbarItem className="hidden lg:flex">
-					<Link href="#">Login</Link>
-				</NavbarItem>
-				<NavbarItem>
-					<Button as={Link} color="primary" href="#" variant="flat">
-						Sign Up
-					</Button>
-				</NavbarItem> */}
+							{
+								user ?
+									<NavbarItem>
+										<UserTumb src={user?.UserPicture || ""} />
+									</NavbarItem>
+									:
+									<>
+										<NavbarItem>
+											<Button onClick={() => router.push('auth')} color="primary" href="auth" variant="flat">
+												Login
+											</Button>
+										</NavbarItem>
+									</>
+							}
 						</NavbarContent>
 					</Navbar>
 			}</>

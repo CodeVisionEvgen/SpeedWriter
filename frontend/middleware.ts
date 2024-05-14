@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { JWT_REFRESH_ERROR } from "./consts/errors";
 
-const protectedRoutes = ["/levels"];
+const protectedRoutes = ["/level", "/admin"];
 
 export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -26,7 +26,7 @@ export default function middleware(req: NextRequest) {
       return e.json().then((data) => {
         const { message } = data;
         if (message == JWT_REFRESH_ERROR) {
-          return NextResponse.redirect(absoluteURL.toString());
+          return NextResponse.redirect(absoluteURL.toString() + "/auth");
         } else {
           return NextResponse.next();
         }

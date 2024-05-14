@@ -4,43 +4,37 @@ import React, { useEffect, useState } from 'react'
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
 import { Button, ButtonGroup } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
+import { GetLevelById } from '../actions/Levels';
+import { ILevel } from '@/types';
 
 
 
 export default function Page() {
-  const [level, setLevel] = useState<number>();
-  const [gameText, setGameText] = useState<string>("A game");
+  const [level, setLevel] = useState<ILevel | null>(null)
+  const [gameText, setGameText] = useState<string>("  ");
   const [hasErr, setHasErr] = useState<boolean>(false);
   const [countErrors, setCountErrors] = useState<number>(0);
   const { onOpen, isOpen, onClose } = useDisclosure();
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  function ToNextLevel() {
-    if (level) {
-      onClose()
-      router.push(`/level?q=${level + 1}`);
-    }
-  }
 
-  function refreshLevel() {
-    if (level) {
-      onClose()
-      router.push(`/level?q=${level}`);
-    }
-  }
 
   useEffect(() => {
-
-  }, [level]);
-
-  useEffect(() => {
-    let level = searchParams.get('q');
-
-    if (level) {
-      setLevel(+level)
+    let id = searchParams.get('id');
+    if (id) {
+      const Level = GetLevelById(id)
+      Level.then((levelInfo) => {
+        let data: ILevel | null = levelInfo?.data;
+        if (data) {
+          setLevel(data);
+          setGameText(data.LevelText);
+        } else {
+          router.replace('/levels')
+        }
+      });
     } else {
-
+      router.replace('/levels')
     }
   }, [])
 
@@ -58,17 +52,13 @@ export default function Page() {
     };
 
     document.addEventListener('keypress', handleKeyPress);
-
+    if (gameText.length <= 0) {
+      onOpen();
+    }
     return () => {
       document.removeEventListener('keypress', handleKeyPress);
     };
   }, [gameText]);
-
-  useEffect(() => {
-    if (gameText.length <= 1) {
-      onOpen();
-    }
-  }, [gameText, countErrors]);
 
   return (
     <>
@@ -82,8 +72,6 @@ export default function Page() {
               <p>Errors: {countErrors}</p>
             </div>
             <ButtonGroup>
-              <Button variant="bordered" onClick={refreshLevel} color="secondary">Again</Button>
-              <Button variant="bordered" onClick={ToNextLevel} color='success'>Next</Button>
             </ButtonGroup>
           </ModalBody>
         </ModalContent>

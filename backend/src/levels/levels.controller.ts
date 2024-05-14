@@ -26,7 +26,6 @@ export class LevelsController {
     return this.levelsService.create(createLevelDto);
   }
 
-  @UseGuards(JwtGuard)
   @Get()
   findAll() {
     return this.levelsService.findAll();
@@ -41,9 +40,10 @@ export class LevelsController {
     return this.levelsService.findByPage(+page, +maxDocs, q, diff);
   }
 
+  @UseGuards(JwtGuard)
   @Get('level/:id')
   findOne(@Param('id', IsObjectIdPipe) id: string) {
-    return this.levelsService.findOne(id);
+    return this.levelsService.findById(id);
   }
 
   @UseGuards(JwtAdminGuard)

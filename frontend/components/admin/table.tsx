@@ -1,6 +1,6 @@
 "use client"
 import { GetLevelByPage } from '@/app/actions/Levels';
-import { ILevel, LevelDifficultyEmuns } from '@/types';
+import { GetLevelsByPageType, ILevel, LevelDifficultyEmuns } from '@/types';
 import { Chip } from '@nextui-org/chip';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table'
 import { Spinner } from "@nextui-org/spinner"
@@ -64,7 +64,8 @@ export default function AdminTableLevels({ switchSelect, setSwitchSelect, reload
 
   useEffect(() => {
     setIsLoading(true);
-    GetLevelByPage(page, requestArgs.diff, requestArgs.query).then(lvl => {
+    GetLevelByPage(page, requestArgs.diff, requestArgs.query).then(({ data }: any) => {
+      let lvl = data as GetLevelsByPageType;
       if (lvl) {
         setLevels(lvl.docs);
         setMaxPages(lvl.maxPages);

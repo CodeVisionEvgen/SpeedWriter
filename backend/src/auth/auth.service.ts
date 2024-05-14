@@ -49,7 +49,7 @@ export class AuthService {
   ): Promise<JwtType> {
     return {
       accessToken: await this.jwtService.signAsync(AccessPayload, {
-        expiresIn: '10s',
+        expiresIn: '1h',
       }),
       refreshToken: await this.jwtService.signAsync(
         { _id: RefreshPayload },

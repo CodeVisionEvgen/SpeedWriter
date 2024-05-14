@@ -51,7 +51,7 @@ export class LevelsService {
     };
   }
 
-  findOne(id: string) {
+  findById(id: string) {
     return this.levelModel.findById(id);
   }
 
