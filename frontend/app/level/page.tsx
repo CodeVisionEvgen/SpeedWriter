@@ -6,18 +6,19 @@ import { Button, ButtonGroup } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
 import { GetLevelById } from '../actions/Levels';
 import { ILevel } from '@/types';
-
+// @ts-expect-error;
+import convertTime from "convert-seconds";
 
 
 export default function Page() {
   const [level, setLevel] = useState<ILevel | null>(null)
   const [gameText, setGameText] = useState<string>("  ");
-  const [hasErr, setHasErr] = useState<boolean>(false);
-  const [countErrors, setCountErrors] = useState<number>(0);
   const { onOpen, isOpen, onClose } = useDisclosure();
   const searchParams = useSearchParams();
   const router = useRouter();
-
+  const [hasErr, setHasErr] = useState<boolean>(false);
+  const [countErrors, setCountErrors] = useState<number>(0);
+  const [time, setTime] = useState<number>(0);
 
 
   useEffect(() => {
@@ -37,6 +38,14 @@ export default function Page() {
       router.replace('/levels')
     }
   }, [])
+  useEffect(() => {
+    if (gameText.length) {
+      var id = setInterval(() => {
+        setTime(time + 1)
+      }, 1000);
+    }
+    return () => clearInterval(id);
+  }, [time])
 
   useEffect(() => {
     const handleKeyPress = ({ key }: {
@@ -61,23 +70,25 @@ export default function Page() {
   }, [gameText]);
 
   return (
+
     <>
       <Modal size="full" isDismissable={false} isOpen={isOpen} onClose={onClose} hideCloseButton backdrop='blur'>
         <ModalContent>
           <ModalHeader>
-            Level 1
+            {level?.LevelName}
           </ModalHeader>
           <ModalBody>
             <div>
-              <p>Errors: {countErrors}</p>
+              <p>Time: {convertTime(time).minutes} minutes {convertTime(time).seconds} seconds</p>
+              <p>Mistakes: {countErrors}</p>
             </div>
             <ButtonGroup>
             </ButtonGroup>
           </ModalBody>
         </ModalContent>
       </Modal>
-      <div className={`p-4 border ${hasErr ? "border-red-600" : "border-gray-800"} rounded-xl`}>
-        <p>{gameText}</p>
+      <div className={`p-4  ${hasErr && " border border-danger-500"} bg-default-100 rounded-sm justify-center flex`}>
+        <p className=' bg-default-200 overflow-hidden text-left p-4 text-lg rounded-xl w-11/12'>{gameText}</p>
       </div>
     </>
   );

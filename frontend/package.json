@@ -41,6 +41,7 @@
 		"autoprefixer": "10.4.19",
 		"axios": "^1.6.8",
 		"clsx": "^2.0.0",
+		"convert-seconds": "^1.0.1",
 		"cookies-next": "^4.1.1",
 		"eslint": "8.48.0",
 		"eslint-config-next": "14.2.1",

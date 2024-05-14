@@ -7,7 +7,7 @@ export default function Section({ children, className }: {
 }) {
   return (
     <Card classNames={{
-      base: `bg-gray-700/50 p-5 ${className}`
+      base: ` bg-gray-700/50 p-5 ${className}`
     }}>
       <CardBody>
         {children}

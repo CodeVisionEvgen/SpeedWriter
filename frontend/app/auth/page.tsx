@@ -24,7 +24,7 @@ export default function App() {
     const data = axios.formToJSON(e.currentTarget);
     try {
       await axios.post("/api/auth/signin/", data);
-      router.replace('/')
+      window.location.replace('/')
     } catch (err: any) {
       const { message } = err.response.data
       setError(Array.isArray(message) ? message[0] : message);
@@ -35,7 +35,7 @@ export default function App() {
     const data = axios.formToJSON(e.currentTarget);
     try {
       await axios.post('/api/auth/signup/', data, { headers: { "Content-Type": "multipart/form-data" }, })
-      router.replace('/')
+      window.location.replace('/')
     }
     catch (err: any) {
       const { message } = err.response.data
