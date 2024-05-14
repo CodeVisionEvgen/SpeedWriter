@@ -17,9 +17,9 @@ export const UserTumb = ({ src }: { src: string }) => {
           </DropdownTrigger>
           <DropdownMenu aria-label="Static Actions">
             <DropdownSection title={"Actions"}>
-              <DropdownItem description="Your profile" key="account" startContent={<PersonIcon width={28} fill='currentColor' />} color="secondary" variant="bordered">My Account</DropdownItem>
-              <DropdownItem description="Messages" key="messages" startContent={<MailIcon width={28} fill='currentColor' />} endContent={<div className=' w-7 rounded-full'>{10}</div>} color="secondary" variant="bordered">Mail</DropdownItem>
-              <DropdownItem description="List of levels" key="levels" startContent={<KeyboardIcon fill='currentColor' />} color="secondary" variant="bordered">Play</DropdownItem>
+              <DropdownItem onClick={() => { router.push("account") }} description="Your profile" key="account" startContent={<PersonIcon width={28} fill='currentColor' />} color="secondary" variant="bordered">My Account</DropdownItem>
+              <DropdownItem onClick={() => { router.push("account?state=mail") }} description="Messages" key="messages" startContent={<MailIcon width={28} fill='currentColor' />} endContent={<div className=' w-7 rounded-full'>{10}</div>} color="secondary" variant="bordered">Mail</DropdownItem>
+              <DropdownItem onClick={() => { router.push("levels") }} description="List of levels" key="levels" startContent={<KeyboardIcon fill='currentColor' />} color="secondary" variant="bordered">Play</DropdownItem>
             </DropdownSection>
             <DropdownSection title={"Danger zone"}>
               <DropdownItem onClick={() => {
