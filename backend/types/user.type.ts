@@ -8,3 +8,11 @@ export enum UserRoles {
   basic,
   admin,
 }
+
+export type UserStatsType = {
+  HardLevels: number;
+  MediumLevels: number;
+  EasyLevels: number;
+  SpeedWriting: number;
+  Mistakes: number;
+};

@@ -52,10 +52,26 @@ export enum SwitchSelectMode {
   multiple = "multiple",
 }
 
+type MongoDbMetaType = {
+  exp: number;
+  iat: number;
+};
+
 export type UserType = {
   UserName: string;
   UserEmail: string;
   UserPicture: string;
-  exp: number;
-  iat: number;
+} & MongoDbMetaType;
+
+export type UserStatsResponseType = {
+  ref: string;
+  stats: UserStatsType;
+};
+
+export type UserStatsType = {
+  HardLevels: number;
+  MediumLevels: number;
+  EasyLevels: number;
+  SpeedWriting: number;
+  Mistakes: number;
 };

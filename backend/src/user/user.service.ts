@@ -4,10 +4,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from 'src/schemas/user.schema';
 import { Model, Types } from 'mongoose';
+import { StatsService } from 'src/stats/stats.service';
 
 @Injectable()
 export class UserService {
   constructor(
+    private readonly statsService: StatsService,
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
   async create(
@@ -16,6 +18,7 @@ export class UserService {
       UserProvider: string;
     },
   ): Promise<User & { _id: Types.ObjectId }> {
+    await this.statsService.create({ ref: createUserDto.UserEmail });
     return new this.userModel(createUserDto).save();
   }
 

@@ -1,4 +1,4 @@
-import { UserType } from "@/types";
+import { UserStatsResponseType, UserStatsType, UserType } from "@/types";
 import axios from "axios";
 import { deleteCookie, setCookie } from "cookies-next";
 const config = {
@@ -57,7 +57,9 @@ export const RequestFetch = async (
   }
 };
 export const GetUser = async () => {
-  const user = await RequestFetch("/api/auth/jwt/decode", "post");
-
-  return user?.data as UserType;
+  const user = (await RequestFetch("/api/auth/jwt/decode", "post"))
+    ?.data as UserType;
+  const stats = (await RequestFetch(`/api/stats/${user.UserEmail}`, "get"))
+    ?.data as UserStatsResponseType;
+  return { ...user, stats: stats.stats } as UserType & { stats: UserStatsType };
 };

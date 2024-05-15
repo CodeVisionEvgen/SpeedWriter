@@ -1,12 +1,12 @@
 "use client"
 import { useEffect, useState } from "react";
 import { GetUser } from "../actions/User";
-import { Card, CardBody } from "@nextui-org/card";
+import { Card } from "@nextui-org/card";
 import UserAccount from "@/components/account/user";
 import AccountTabs from "@/components/account/tabs";
-import { UserType } from "@/types";
+import { UserStatsType, UserType } from "@/types";
 export default function Page() {
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<UserType & { stats: UserStatsType } | null>(null);
   useEffect(() => {
     GetUser().then((data) => {
       setUser(data);

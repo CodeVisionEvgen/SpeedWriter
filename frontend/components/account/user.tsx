@@ -1,5 +1,5 @@
 import { Achiements } from '@/app/actions/Achievements'
-import { IAchievement, ModalContent as ModalContentType, UserType } from "@/types";
+import { IAchievement, ModalContent as ModalContentType, UserStatsType, UserType } from "@/types";
 import { Avatar, AvatarGroup } from '@nextui-org/avatar'
 import { Button } from '@nextui-org/button'
 import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/card'
@@ -9,7 +9,7 @@ import { user } from '@nextui-org/theme'
 import { Tooltip } from '@nextui-org/tooltip'
 import React, { useEffect, useState } from 'react'
 
-export default function UserAccount({ user }: { user: UserType }) {
+export default function UserAccount({ user }: { user: UserType & { stats: UserStatsType } }) {
   const { onOpen, isOpen, onClose } = useDisclosure();
   const [modalContent, setModalContent] = useState<ModalContentType | null>(null)
   function HandleModalContext(ach: IAchievement) {
