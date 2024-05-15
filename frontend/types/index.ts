@@ -17,6 +17,14 @@ export type GetLevelsByPageType = {
   docs: ILevel[];
 };
 
+// export type CardAchievementStyleType = {
+//   bgColor: string;
+// };
+export interface IAchievement {
+  title: string;
+  descriptions: string;
+  image: string;
+}
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
@@ -33,8 +41,9 @@ export interface ILevel {
 }
 
 export type ModalContent = {
-  header: ReactNode | JSX.Element | null;
-  body: ReactNode | JSX.Element | null;
+  header?: ReactNode | JSX.Element | null;
+  body?: ReactNode | JSX.Element | null;
+  footer?: ReactNode | JSX.Element | null;
 };
 
 export enum SwitchSelectMode {
