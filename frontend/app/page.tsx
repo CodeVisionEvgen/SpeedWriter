@@ -6,7 +6,7 @@ import Section from "@/components/Section";
 
 export default function Home() {
 	return (
-		<Section className=" bg-[rgba(0,0,0,0)]">
+		<Section color=" bg-[rgba(0,0,0,0)]">
 			<span><h3 className=" text-[35px]">A game about your typing speed.</h3></span>
 		</Section >
 	);

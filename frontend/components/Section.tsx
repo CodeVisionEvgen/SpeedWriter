@@ -1,15 +1,16 @@
 import { Card, CardBody } from '@nextui-org/card'
 import React from 'react'
 
-export default function Section({ children, className }: {
+export default function Section({ children, className, color }: {
   children?: React.ReactNode
-  className?: string
+  className?: string,
+  color?: string
 }) {
   return (
     <Card classNames={{
-      base: ` bg-gray-700/50 p-5 ${className}`
+      base: `p-5 ${color}`
     }}>
-      <CardBody>
+      <CardBody className={className}>
         {children}
       </CardBody>
     </Card>

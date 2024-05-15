@@ -1,6 +1,4 @@
 "use client"
-
-import Section from "@/components/Section"
 import { Spinner } from "@nextui-org/spinner"
 
 export default function loading() {
