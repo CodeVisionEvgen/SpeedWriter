@@ -13,7 +13,9 @@ export const UserTumb = ({ src }: { src: string }) => {
       <Badge size='sm' content={10} isInvisible={false} shape="rectangle" color='danger'>
         <Dropdown>
           <DropdownTrigger>
-            <Avatar className=' cursor-pointer' size="md" src={src} alt={"Account"} />
+            <Avatar imgProps={{
+              referrerPolicy: 'no-referrer'
+            }} className=' cursor-pointer' size="md" src={src} alt={"Account"} />
           </DropdownTrigger>
           <DropdownMenu aria-label="Static Actions">
             <DropdownSection title={"Actions"}>

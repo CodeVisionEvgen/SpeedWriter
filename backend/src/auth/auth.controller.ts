@@ -100,6 +100,21 @@ export class AuthController {
     res.json({ ok: 1 });
   }
 
+  @Post('verify')
+  async verify(@Req() req: Request, @Res() response: Response) {
+    const AccessToken = ExtractJwt.fromExtractors([
+      (request) => {
+        return request.cookies['AccessToken'];
+      },
+    ])(req);
+    try {
+      const verifyToken = await this.authService.jwtVerify(AccessToken);
+      response.json(verifyToken);
+    } catch (error) {
+      response.status(401).json({ message: 'Jwt Expired' });
+    }
+  }
+
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')
   async refresh(@Req() req: Request, @Res() response: Response) {
@@ -239,7 +254,7 @@ export class AuthController {
     response.cookie('AccessToken', tokens.accessToken, { httpOnly: false });
     response.cookie('RefreshToken', tokens.refreshToken, { httpOnly: true });
 
-    response.status(201).redirect(this.configService.get('FRONT_URL'));
+    response.status(201).json(tokens);
   }
 
   @UseGuards(JwtRefreshGuard)

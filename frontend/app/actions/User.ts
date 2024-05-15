@@ -1,6 +1,6 @@
 import { UserType } from "@/types";
 import axios from "axios";
-import { setCookie } from "cookies-next";
+import { deleteCookie, setCookie } from "cookies-next";
 const config = {
   withCredentials: true,
 };
@@ -44,10 +44,13 @@ export const RequestFetch = async (
             withCredentials: true,
           })
         ).data;
-        setCookie("AccessToken", tokens.AccessToken);
-        setCookie("RefreshToken", tokens.RefreshToken);
+        setCookie("AccessToken", tokens.accessToken);
+        setCookie("RefreshToken", tokens.refreshToken);
         return await SwitchMethod(url, method, body, userConfig);
       } catch (error) {
+        deleteCookie("AccessToken");
+        deleteCookie("RefreshToken");
+        deleteCookie("token");
         window.location.href = "/";
       }
     }
