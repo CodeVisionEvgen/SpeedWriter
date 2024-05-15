@@ -23,7 +23,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
   ): Promise<any> {
     const { name, emails, photos } = profile;
     const user = {
-      UserName: name.givenName,
+      UserName: name.familyName + ' ' + name.givenName,
       UserEmail: emails[0].value,
       UserPicture: photos[0].value,
     };
