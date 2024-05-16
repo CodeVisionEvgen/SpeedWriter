@@ -26,9 +26,9 @@ export class LevelsController {
     return this.levelsService.create(createLevelDto);
   }
 
-  @Get()
-  findAll() {
-    return this.levelsService.findAll();
+  @Get('length')
+  getLength() {
+    return this.levelsService.getLengthLevels();
   }
   @Get('page/:page')
   findByPage(

@@ -19,8 +19,9 @@ export class LevelsService {
     return await level.save();
   }
 
-  findAll() {
-    return this.levelModel.find();
+  async getLengthLevels() {
+    const levelsLength = await this.levelModel.countDocuments();
+    return { levelsCount: levelsLength };
   }
 
   async findByPage(
