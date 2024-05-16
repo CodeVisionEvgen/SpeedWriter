@@ -51,8 +51,35 @@ export class UserService {
     return this.userModel.updateOne({ UserEmail: email }, updateUserDto);
   }
 
-  findByEmail(email: string) {
-    return this.userModel.findOne({ UserEmail: email });
+  async findByEmail(email: string) {
+    const user = await this.userModel
+      .aggregate()
+      .match({ UserEmail: email })
+      .lookup({
+        from: 'userstats',
+        as: 'stats',
+        foreignField: 'UserEmail',
+        localField: 'ref',
+      })
+      .project({
+        stats: {
+          _id: 0,
+          ref: 0,
+          __v: 0,
+          createdAt: 0,
+          updatedAt: 0,
+        },
+      })
+      .unwind({
+        path: '$stats',
+      });
+    return {
+      ...user[0],
+      stats: {
+        ...user[0].stats.stats,
+        completedLevels: user[0].stats.completedLevels,
+      },
+    };
   }
 
   deleteByEmail(email: string) {

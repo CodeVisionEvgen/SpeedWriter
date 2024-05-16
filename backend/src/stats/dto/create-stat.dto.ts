@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsDefined,
   IsNotEmptyObject,
   IsObject,
@@ -17,4 +18,8 @@ export class CreateStatDto {
   @IsObject()
   @ValidateNested()
   stats?: UserStatsType;
+  @IsOptional()
+  @ValidateNested()
+  @IsArray()
+  completedLevels?: string[];
 }

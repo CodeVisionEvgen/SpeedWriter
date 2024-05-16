@@ -28,6 +28,11 @@ export class UserStats {
     default: defaultStatsValues,
   })
   stats: UserStatsType;
+  @Prop({
+    type: Array,
+    default: [],
+  })
+  completedLevels: string[];
 }
 
 export const userStatSchema = SchemaFactory.createForClass(UserStats);

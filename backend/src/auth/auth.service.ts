@@ -44,7 +44,10 @@ export class AuthService {
   }
 
   async genJwtTokens(
-    AccessPayload: Omit<User, 'UserPassword' | 'UserProvider' | 'UserRoles'>,
+    AccessPayload: Omit<
+      User,
+      'UserPassword' | 'UserProvider' | 'UserRoles' | '_id'
+    >,
     RefreshPayload: string,
   ): Promise<JwtType> {
     return {
