@@ -12,7 +12,7 @@ import { ModalContent as ModalContentType, SwitchSelectMode } from '@/types/inde
 import { AdminModalAddContext, AdminModalDeleteContext, AdminModalUpdateContext } from './modals/AdminModalContext';
 import { Pagination } from "@nextui-org/pagination"
 
-export const LevelsDifficulty = [
+export const LevelsDifficulty: { key: number; value: string; element: JSX.Element }[] = [
   { key: 1, value: "easy", element: <Chip color='success' variant="dot" key={Math.random()}>Easy</Chip> },
   { key: 2, value: "medium", element: <Chip color='warning' variant="dot" key={Math.random()}>Medium</Chip> },
   { key: 3, value: "hard", element: <Chip color='danger' variant="dot" key={Math.random()}>Hard</Chip> }

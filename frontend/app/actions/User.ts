@@ -57,9 +57,9 @@ export const RequestFetch = async (
   }
 };
 export const GetUser = async () => {
-  const user = (await RequestFetch("/api/auth/jwt/decode", "post"))
+  const decodedUser = (await RequestFetch("/api/auth/jwt/decode", "post"))
     ?.data as UserType;
-  const stats = (await RequestFetch(`/api/stats/${user.UserEmail}`, "get"))
-    ?.data as UserStatsResponseType;
-  return { ...user, stats: stats.stats } as UserType & { stats: UserStatsType };
+  const user = (await RequestFetch(`/api/user/${decodedUser.UserEmail}`, "get"))
+    ?.data;
+  return user as UserType & { stats: UserStatsType };
 };

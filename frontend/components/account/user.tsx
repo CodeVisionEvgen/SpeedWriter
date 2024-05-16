@@ -9,7 +9,7 @@ import { user } from '@nextui-org/theme'
 import { Tooltip } from '@nextui-org/tooltip'
 import React, { useEffect, useState } from 'react'
 
-export default function UserAccount({ user }: { user: UserType & { stats: UserStatsType } }) {
+export default function UserAccount({ user, setSelected }: { setSelected: React.Dispatch<React.SetStateAction<string>>, user: UserType & { stats: UserStatsType } }) {
   const { onOpen, isOpen, onClose } = useDisclosure();
   const [modalContent, setModalContent] = useState<ModalContentType | null>(null)
   function HandleModalContext(ach: IAchievement) {
@@ -56,7 +56,7 @@ export default function UserAccount({ user }: { user: UserType & { stats: UserSt
         <CardFooter className="grid justify-start gap-4">
           <h2 className="m-0 p-0 text-left text-[15pt]">Achievements</h2>
           <AvatarGroup isGrid max={2} renderCount={(count) => {
-            return <Avatar showFallback src='https://images.unsplash.com/broken' fallback={`+${count}`} />
+            return <Avatar className=' cursor-pointer' onClick={() => setSelected('achievements')} showFallback src='https://images.unsplash.com/broken' fallback={`+${count}`} />
           }} size="lg" className=" flex justify-start">
             {Achiements.map((ach) => {
               return (

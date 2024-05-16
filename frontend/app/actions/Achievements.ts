@@ -8,7 +8,7 @@ export const Achiements: IAchievement[] = [
   },
   {
     title: "HARD?",
-    descriptions: "Complete hard level on 1 minute",
+    descriptions: "Complete hard level in 1 minute",
     image: "https://ik.imagekit.io/sujkmwsrb/achievements/HardOnOneMinute.svg",
   },
   {

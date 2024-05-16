@@ -1,40 +1,38 @@
 import { UserStatsType, UserType } from '@/types'
-import { Card, CardBody } from '@nextui-org/card'
+import { Card } from '@nextui-org/card'
 import { Tabs, Tab } from '@nextui-org/tabs'
 import React, { useState } from 'react'
-import { MailIcon, UserCardIcon, UserSettingsIcon } from '../icons'
+import { MailIcon, TrophyIcon, UserCardIcon, UserSettingsIcon } from '../icons'
+import UserChart from './chart/userChart'
+import UserStat from './stats/userStat'
 
-export default function AccountTabs({ user }: { user: UserType & { stats: UserStatsType } }) {
-  const [selected, setSelected] = useState<string>('dashboard')
+export default function AccountTabs({ user, selected, setSelected }: { selected: string, setSelected: React.Dispatch<React.SetStateAction<string>>, user: UserType & { stats: UserStatsType } }) {
+
   return (
     <Card className="p-3 w-full">
       <Tabs
         color='primary'
         variant="solid"
-        // classNames={{
-        //   cursor: " bg-[#292929]"
-        // }}
         aria-label="Actions"
         selectedKey={selected}
         // @ts-expect-error
         onSelectionChange={setSelected}
       >
         <Tab key="statistics" title={<div className='flex items-center gap-1'><UserCardIcon fill='currentColor' /> Statistics</div>}>
-          <div className='m-1'>
-            <h2>Statistics</h2>
-            <div>
-              Mistakes: {user.stats.Mistakes}
-              SpeedWriting: {user.stats.SpeedWriting} letters per minute
-            </div>
-            <h2>Completed levels</h2>
-            <div>
-              Hard: {user.stats.HardLevels}
-              Medium: {user.stats.MediumLevels}
-              Easy: {user.stats.EasyLevels}
+          <div className="m-1 mt-5">
+            <h2 className='text-[25px] text-default-600 tracking-wider'>Statistics</h2>
+            <div className='flex gap-4 items-start'>
+              <UserChart stats={user.stats} />
+              <UserStat stats={user.stats} />
             </div>
           </div>
         </Tab>
-        <Tab key="mail" title={<div className='flex items-center gap-1'><MailIcon fill='currentColor' /> Mail</div>}>
+        <Tab key="mail" title={<div className='flex items-center gap-1'><MailIcon fill='currentColor' /> Notifications</div>}>
+          <div className='m-1'>
+            Statistics
+          </div>
+        </Tab>
+        <Tab key="achievements" title={<div className='flex items-center gap-1'><TrophyIcon fill='currentColor' /> Achievements</div>}>
           <div className='m-1'>
             Statistics
           </div>

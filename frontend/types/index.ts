@@ -74,4 +74,5 @@ export type UserStatsType = {
   EasyLevels: number;
   SpeedWriting: number;
   Mistakes: number;
+  completedLevels: string[];
 };

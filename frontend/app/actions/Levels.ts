@@ -44,6 +44,9 @@ export async function UpdateLevel(
     },
   });
 }
+export async function GetLevelsLength() {
+  return RequestFetch("/api/levels/length", "get");
+}
 export async function DeleteLevels(
   ids: string[]
 ): Promise<AxiosResponse<any, any> | undefined> {

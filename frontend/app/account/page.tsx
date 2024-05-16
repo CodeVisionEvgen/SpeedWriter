@@ -6,6 +6,7 @@ import UserAccount from "@/components/account/user";
 import AccountTabs from "@/components/account/tabs";
 import { UserStatsType, UserType } from "@/types";
 export default function Page() {
+  const [selected, setSelected] = useState<string>('statistics')
   const [user, setUser] = useState<UserType & { stats: UserStatsType } | null>(null);
   useEffect(() => {
     GetUser().then((data) => {
@@ -16,8 +17,8 @@ export default function Page() {
   return (
     <Card className=" p-5">
       <div className="flex gap-2">
-        {user && <UserAccount user={user} />}
-        {user && <AccountTabs user={user} />}
+        {user && <UserAccount setSelected={setSelected} user={user} />}
+        {user && <AccountTabs selected={selected} setSelected={setSelected} user={user} />}
       </div>
     </Card>
   )
