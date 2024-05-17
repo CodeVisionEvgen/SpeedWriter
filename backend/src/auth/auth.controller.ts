@@ -202,12 +202,10 @@ export class AuthController {
     createUserDto: CreateUserDto,
     @Res() response: Response,
   ) {
-    if (UserPicture && UserPicture.size > 500000)
-      return new BadRequestException('Picture must to be lower than 0.5mb');
-
+    if (UserPicture && UserPicture.size > 1500000)
+      throw new BadRequestException('Picture must to be lower than 1.5mb');
     if (await this.userService.findByEmail(createUserDto.UserEmail))
       throw new UnauthorizedException('Email is exist');
-
     if (await this.userService.findByName(createUserDto.UserName))
       throw new UnauthorizedException('User is exist');
 

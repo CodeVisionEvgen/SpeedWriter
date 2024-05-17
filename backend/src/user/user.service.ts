@@ -73,13 +73,17 @@ export class UserService {
       .unwind({
         path: '$stats',
       });
-    return {
-      ...user[0],
-      stats: {
-        ...user[0].stats.stats,
-        completedLevels: user[0].stats.completedLevels,
-      },
-    };
+    if (user.length) {
+      return {
+        ...user[0],
+        stats: user[0]?.stats
+          ? {
+              ...user[0].stats.stats,
+              completedLevels: user[0].stats.completedLevels,
+            }
+          : {},
+      };
+    } else return undefined;
   }
 
   deleteByEmail(email: string) {

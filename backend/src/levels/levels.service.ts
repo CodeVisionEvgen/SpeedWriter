@@ -21,7 +21,13 @@ export class LevelsService {
 
   async getLengthLevels() {
     const levelsLength = await this.levelModel.countDocuments();
-    return { levelsCount: levelsLength };
+    const easy = (await this.levelModel.find({ LevelDifficulty: 'easy' }))
+      .length;
+    const medium = (await this.levelModel.find({ LevelDifficulty: 'medium' }))
+      .length;
+    const hard = (await this.levelModel.find({ LevelDifficulty: 'hard' }))
+      .length;
+    return { total: levelsLength, hard, medium, easy };
   }
 
   async findByPage(

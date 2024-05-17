@@ -67,11 +67,16 @@ export type UserStatsResponseType = {
   ref: string;
   stats: UserStatsType;
 };
-
+export type LevelsLengthType = {
+  hard: number;
+  medium: number;
+  easy: number;
+  total: number;
+};
 export type UserStatsType = {
-  HardLevels: number;
-  MediumLevels: number;
-  EasyLevels: number;
+  hard: number;
+  medium: number;
+  easy: number;
   SpeedWriting: number;
   Mistakes: number;
   completedLevels: string[];

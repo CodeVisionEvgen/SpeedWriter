@@ -5,9 +5,9 @@ import { UserStatsType } from 'types/user.type';
 export type UserStatDocument = HydratedDocument<UserStats>;
 
 export const defaultStatsValues: UserStatsType = {
-  HardLevels: 0,
-  MediumLevels: 0,
-  EasyLevels: 0,
+  hard: 0,
+  medium: 0,
+  easy: 0,
   SpeedWriting: 0,
   Mistakes: 0,
 };

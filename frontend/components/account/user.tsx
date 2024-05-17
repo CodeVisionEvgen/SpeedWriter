@@ -16,7 +16,7 @@ export default function UserAccount({ user, setSelected }: { setSelected: React.
     setModalContent({
       body: <Card className='w-max'>
         <CardBody className='p-5 w-full flex items-center'>
-          <Avatar className='w-32 h-32' src={ach.image} alt={ach.title} />
+          <Avatar className='overflow-visible w-32 h-32' src={ach.image} alt={ach.title} />
         </CardBody>
         <div className='w-full h-full p-3 mt-3 bg-default-100/75'>
           <p className=' text-[20px]'>{ach.title}</p>
@@ -65,7 +65,7 @@ export default function UserAccount({ user, setSelected }: { setSelected: React.
                     img: "hover: shadow-lg;"
                   }} onClick={() => { HandleModalContext(ach) }} imgProps={{
                     referrerPolicy: "no-referrer",
-                  }} className={` w-12 h-12 text-large`} src={ach.image} alt={ach.title} />
+                  }} className={` w-12 h-12 text-large  overflow-visible`} src={ach.image} alt={ach.title} />
                 </Tooltip>
               )
             })}

@@ -14,5 +14,6 @@ import { UserModule } from 'src/user/user.module';
     UserModule,
     MongooseModule.forFeature([{ name: Level.name, schema: LevelSchema }]),
   ],
+  exports: [LevelsService],
 })
 export class LevelsModule {}

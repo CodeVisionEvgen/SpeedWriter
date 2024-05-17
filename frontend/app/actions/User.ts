@@ -56,6 +56,16 @@ export const RequestFetch = async (
     }
   }
 };
+export const UpdateUserStats = async (body: any) => {
+  const decodedUser = (await RequestFetch("/api/auth/jwt/decode", "post"))
+    ?.data as UserType;
+  const updatedStats = await RequestFetch(
+    `/api/stats/${decodedUser.UserEmail}`,
+    "patch",
+    body
+  );
+  return updatedStats;
+};
 export const GetUser = async () => {
   const decodedUser = (await RequestFetch("/api/auth/jwt/decode", "post"))
     ?.data as UserType;
