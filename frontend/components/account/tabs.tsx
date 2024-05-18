@@ -8,6 +8,7 @@ import UserStat from './stats/userStat'
 import { Achiements } from '@/app/actions/Achievements'
 import { Avatar } from '@nextui-org/avatar'
 import { Modal, ModalContent, ModalBody, useDisclosure } from '@nextui-org/modal'
+import Mail from './mail/Mail'
 
 
 export default function AccountTabs({ user, selected, setSelected }: { selected: string, setSelected: React.Dispatch<React.SetStateAction<string>>, user: UserType & { stats: UserStatsType } }) {
@@ -61,9 +62,9 @@ export default function AccountTabs({ user, selected, setSelected }: { selected:
               </div>
             </div>
           </Tab>
-          <Tab key="mail" isDisabled title={<div className='flex items-center gap-1'><MailIcon fill='currentColor' /> Notifications</div>}>
+          <Tab key="mail" title={<div className='flex items-center gap-1'><MailIcon fill='currentColor' /> Notifications</div>}>
             <div className='m-1 mt-5'>
-              Mail
+              <Mail />
             </div>
           </Tab>
           <Tab key="achievements" title={<div className='flex items-center gap-1'><TrophyIcon fill='currentColor' /> Achievements</div>}>

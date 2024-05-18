@@ -4,13 +4,15 @@ import { Tab, Tabs } from "@nextui-org/tabs";
 import { Input } from "@nextui-org/input";
 import { Link } from "@nextui-org/link";
 import { Button } from "@nextui-org/button";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import { AuthWithGoogleBtn } from "@/components/ui/btns";
 import { Spacer } from "@nextui-org/spacer";
 import { FileImageInput } from "@/components/ui/inputs";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { UserType } from "@/types";
+import { GetUser } from "../actions/User";
 export default function App() {
 
   // ADD REF TO USER IN REFRESH DB SCHEMA FOR DELETE TOKENS IN NEW AUTH
@@ -19,6 +21,17 @@ export default function App() {
   const [selected, setSelected] = useState("login");
   const router = useRouter();
   const [error, setError] = useState<string>("");
+  const [user, setUser] = useState<UserType | null>(null)
+  useEffect(() => {
+    GetUser().then((data) => {
+      setUser(data);
+    })
+  }, []);
+  useEffect(() => {
+    if (user) {
+      router.replace('/account')
+    }
+  }, [user])
   async function handleSigninSubmit(e: FormEvent) {
     e.preventDefault();
     const data = axios.formToJSON(e.currentTarget);

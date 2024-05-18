@@ -28,9 +28,6 @@ export default function AppNavbar() {
 	const pathname = usePathname();
 	const router = useRouter();
 	const [user, setUser] = useState<UserType | null>(null);
-	function RouterToMainPage() {
-		router.push('/')
-	}
 
 	useEffect(() => {
 		if (getCookie("AccessToken")) {
@@ -40,30 +37,49 @@ export default function AppNavbar() {
 		}
 	}, [])
 
+	function handleActive(url: string = "/") {
+		return pathname === url || false;
+	}
+
 	return (
 		<>
 			{
 				ignoreStackUrlComponents.includes(pathname) ? "" :
 
-					<Navbar>
-						<NavbarBrand onClick={RouterToMainPage} className=' cursor-pointer'>
+					<Navbar classNames={{
+						item: [
+							"flex",
+							"relative",
+							"h-full",
+							"items-center",
+							"data-[active=true]:after:content-['']",
+							"data-[active=true]:after:absolute",
+							"data-[active=true]:after:bottom-0",
+							"data-[active=true]:after:left-0",
+							"data-[active=true]:after:right-0",
+							"data-[active=true]:after:h-[2px]",
+							"data-[active=true]:after:rounded-[2px]",
+							"data-[active=true]:after:bg-primary",
+						],
+					}}>
+						<NavbarBrand onClick={() => router.push('/')} className=' cursor-pointer'>
 							<Image className='remove-image-drag' draggable="false" unoptimized src={logo} width={40} alt='logo' height={40} />
 							<Spacer />
 							<h3 className=' text-2xl flex items-end select-none'>SpeedWriter</h3>
 						</NavbarBrand>
 						<NavbarContent className="hidden sm:flex gap-4" justify="center">
-							<NavbarItem>
-								<Link color="foreground" href="top">
+							<NavbarItem isActive={handleActive('/')}>
+								<Link className=' cursor-pointer' onClick={() => router.push('/')} color="foreground">
 									Main
 								</Link>
 							</NavbarItem>
-							<NavbarItem>
-								<Link href="levels" color="primary">
+							<NavbarItem className=' cursor-pointer' isActive={handleActive('/help')}>
+								<Link onClick={() => router.push('/help')} color="foreground">
 									Help
 								</Link>
 							</NavbarItem>
-							<NavbarItem>
-								<Link color="foreground" href="about">
+							<NavbarItem className=' cursor-pointer' isActive={handleActive('/about')}>
+								<Link onClick={() => router.push('/about')} color="foreground">
 									About
 								</Link>
 							</NavbarItem>
@@ -78,7 +94,7 @@ export default function AppNavbar() {
 									<>
 										<NavbarItem>
 											<Button onClick={() => router.push('auth')} color="primary" href="auth" variant="flat">
-												Login
+												Signup
 											</Button>
 										</NavbarItem>
 									</>
