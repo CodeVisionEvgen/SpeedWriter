@@ -46,6 +46,7 @@
 		"clsx": "^2.0.0",
 		"convert-seconds": "^1.0.1",
 		"cookies-next": "^4.1.1",
+		"date-format": "^4.0.14",
 		"eslint": "8.48.0",
 		"eslint-config-next": "14.2.1",
 		"framer-motion": "^11.1.1",

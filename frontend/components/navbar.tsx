@@ -88,7 +88,7 @@ export default function AppNavbar() {
 							{
 								user ?
 									<NavbarItem>
-										<UserTumb src={user?.UserPicture || ""} />
+										<UserTumb user={user} />
 									</NavbarItem>
 									:
 									<>

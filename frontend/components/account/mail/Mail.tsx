@@ -1,48 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/table";
+import { Avatar } from "@nextui-org/avatar";
+import { Chip } from "@nextui-org/chip";
+import { UserNotify, UserType } from "@/types";
+import { GetUser } from "@/app/actions/User";
+// @ts-expect-error
+import dateFormat from "date-format";
 
-const rows = [
-  {
-    key: "1",
-    from: "Tony Reichert",
-    message: "Hello"
-  },
-  {
-    key: "2",
-    from: "Tony Reichert",
-    message: "Hello"
-  },
-  {
-    key: "3",
-    from: "Tony Reichert",
-    message: "Hello HelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHelloHello..."
-  },
-];
-
-const columns = [
-  {
-    key: "from",
-    label: "FROM",
-  },
-  {
-    key: "message",
-    label: "Message",
-  },
-];
+function renderRow(data: UserNotify) {
+  return (
+    <TableRow key={data.createdAt}>
+      <TableCell><div className="flex gap-5"><Avatar size="sm" radius="sm" src={"/favicon.ico"} /><Chip radius="sm" variant="flat" color="secondary">SpeedWriter</Chip></div></TableCell>
+      <TableCell>{data.message}</TableCell>
+      <TableCell>{dateFormat.asString("dd-MM-yy", new Date(data.createdAt))}</TableCell>
+    </TableRow>
+  )
+}
 
 export default function App() {
+  const [user, setUser] = useState<UserType | null>(null);
+
+  useEffect(() => {
+    GetUser().then((data) => {
+      setUser(data);
+    })
+  }, [])
   return (
-    <Table aria-label="Example table with dynamic content">
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-      </TableHeader>
-      <TableBody items={rows}>
-        {(item) => (
-          <TableRow key={item.key}>
-            {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      {user &&
+        <Table isCompact removeWrapper aria-label="Mail" >
+          <TableHeader>
+            <TableColumn className=" bg-default-50" key="From">From</TableColumn>
+            <TableColumn className=" bg-default-50" key="Message">Message</TableColumn>
+            <TableColumn className=" bg-default-50" key="Date">Date</TableColumn>
+          </TableHeader>
+          <TableBody items={user?.notifies}>
+            {renderRow}
+          </TableBody>
+        </Table >
+      }
+    </>
   );
 }

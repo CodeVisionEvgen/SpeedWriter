@@ -43,15 +43,13 @@ export default function UserAccount({ user, setSelected }: { setSelected: React.
         </ModalContent>
       </Modal>
       <Card className=" w-[280px] p-2">
-        <CardHeader className="flex justify-center">
+        <CardHeader className="grid justify-center">
           <Avatar className="w-25 h-25 text-large" src={user?.UserPicture} imgProps={{
             referrerPolicy: "no-referrer",
           }} />
-        </CardHeader>
-        <CardBody className=" grid gap-2">
           <h2 className=" text-lg text-default-600 w-full text-center">{user?.UserName}</h2>
           <h2 className=" text-[13px] text-default-300 text-left">{user?.UserEmail}</h2>
-        </CardBody>
+        </CardHeader>
         <Divider />
         <CardFooter className="grid justify-start gap-4">
           <h2 className="m-0 p-0 text-left text-[15pt]">Achievements</h2>

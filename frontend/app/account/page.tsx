@@ -15,6 +15,8 @@ export default function Page() {
     if (state?.length) {
       setSelected(state);
     }
+  }, [path])
+  useEffect(() => {
     GetUser().then((data) => {
       setUser(data);
     })

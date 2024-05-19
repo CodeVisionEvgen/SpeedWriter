@@ -13,6 +13,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { UserType } from "@/types";
 import { GetUser } from "../actions/User";
+import { getCookies } from "cookies-next";
+import { cookies } from "next/headers";
 export default function App() {
 
   // ADD REF TO USER IN REFRESH DB SCHEMA FOR DELETE TOKENS IN NEW AUTH
@@ -21,11 +23,14 @@ export default function App() {
   const [selected, setSelected] = useState("login");
   const router = useRouter();
   const [error, setError] = useState<string>("");
-  const [user, setUser] = useState<UserType | null>(null)
+  const [user, setUser] = useState<UserType | null>(null);
+  const cookies = getCookies()
   useEffect(() => {
-    GetUser().then((data) => {
-      setUser(data);
-    })
+    if (cookies.AccessToken) {
+      GetUser().then((data) => {
+        setUser(data);
+      });
+    }
   }, []);
   useEffect(() => {
     if (user) {

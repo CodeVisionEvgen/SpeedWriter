@@ -61,6 +61,8 @@ export type UserType = {
   UserName: string;
   UserEmail: string;
   UserPicture: string;
+  stats: UserStatsType;
+  notifies: UserNotify[];
 } & MongoDbMetaType;
 
 export type UserStatsResponseType = {
@@ -72,6 +74,11 @@ export type LevelsLengthType = {
   medium: number;
   easy: number;
   total: number;
+};
+export type UserNotify = {
+  message: string;
+  read: boolean;
+  createdAt: string;
 };
 export type UserStatsType = {
   hard: number;

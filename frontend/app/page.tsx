@@ -9,8 +9,6 @@ import { Link } from "@nextui-org/link";
 import { Button } from "@nextui-org/button";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon } from "@/components/icons";
-import { UserType } from "@/types";
-import { GetUser } from "./actions/User";
 const MonitionVariantsImages = {
 	show: {
 		opacity: 1,
@@ -29,12 +27,6 @@ const MonitionVariantsImages = {
 export default function Home() {
 	const router = useRouter();
 	const [slide, setSlide] = useState<number>(1);
-	const [user, setUser] = useState<UserType | null>(null)
-	useEffect(() => {
-		GetUser().then((data) => {
-			setUser(data);
-		})
-	}, [])
 	useEffect(() => {
 		setTimeout(() => {
 			setSlide((sli) => sli == 3 ? (sli = 1) : (sli + 1));
@@ -49,7 +41,7 @@ export default function Home() {
 					</h3>
 					<p className="mt-5 text-[20px] text-default-500">Try to get all achievements in this game</p>
 					<div className="flex gap-3 mt-[70px]">
-						<Button endContent={<ArrowLeftIcon fill="currentColor" />} className=" rounded-full" size="lg" onClick={() => user ? router.replace("/account") : router.replace("/auth")} color="primary" as={Link}>
+						<Button endContent={<ArrowLeftIcon fill="currentColor" />} className=" rounded-full" size="lg" onClick={() => router.replace("/auth")} color="primary" as={Link}>
 							Try now
 						</Button>
 					</div>

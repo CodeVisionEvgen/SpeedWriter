@@ -4,6 +4,7 @@ import { Providers } from "./providers";
 import Navbar from "@/components/navbar";
 import clsx from "clsx";
 import Gradient from "@/components/gradient";
+import NotificationCard from "@/components/notification/NotificationCard";
 
 
 export const metadata: Metadata = {
@@ -45,8 +46,9 @@ export default function RootLayout({
 							<Gradient />
 							{children}
 						</main>
-						<footer className="w-full flex items-center justify-center py-3">
-						</footer>
+						<div className=" absolute bottom-8 right-6">
+							<NotificationCard />
+						</div>
 					</div>
 				</Providers>
 			</body>

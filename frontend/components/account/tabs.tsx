@@ -16,9 +16,9 @@ export default function AccountTabs({ user, selected, setSelected }: { selected:
   const [modalContent, setModalContent] = useState<ModalContentType | null>(null)
   function HandleModalContext(ach: IAchievement) {
     setModalContent({
-      body: <Card className='w-max'>
-        <CardBody className='p-5 w-full flex items-center'>
-          <Avatar className='w-32 h-32 overflow-visible' src={ach.image} alt={ach.title} />
+      body: <Card className='w-max flex flex-wrap'>
+        <CardBody className='p-5 w-full flex-wrap flex items-center'>
+          <Avatar className='w-32 h-32 flex-wrap overflow-visible' src={ach.image} alt={ach.title} />
         </CardBody>
         <div className='w-full h-full p-3 mt-3 bg-default-100/75'>
           <p className=' text-[20px]'>{ach.title}</p>
@@ -70,7 +70,7 @@ export default function AccountTabs({ user, selected, setSelected }: { selected:
           <Tab key="achievements" title={<div className='flex items-center gap-1'><TrophyIcon fill='currentColor' /> Achievements</div>}>
             <div className='m-1 mt-5'>
               {/* <h2 className='text-[25px] text-default-600 tracking-wider'>Achievements</h2> */}
-              <div className=' flex gap-10'>
+              <div className=' flex gap-10 flex-wrap'>
                 {Achiements.map((ach) => {
                   return (
                     <Avatar onClick={() => { HandleModalContext(ach) }} src={ach.image} alt={ach.title} key={ach.title} className="w-20 h-20 text-large overflow-visible cursor-pointer" />
@@ -79,7 +79,7 @@ export default function AccountTabs({ user, selected, setSelected }: { selected:
               </div>
             </div>
           </Tab>
-          <Tab key="settings" isDisabled title={<div className='flex items-center gap-1'><UserSettingsIcon fill='currentColor' /> Settings</div>}>
+          <Tab key="settings" title={<div className='flex items-center gap-1'><UserSettingsIcon fill='currentColor' /> Settings</div>}>
             <div className='m-1 mt-5'>
               Settings
             </div>
