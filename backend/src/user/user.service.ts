@@ -5,11 +5,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from 'src/schemas/user.schema';
 import { Model, Types } from 'mongoose';
 import { StatsService } from 'src/stats/stats.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly statsService: StatsService,
+    private readonly notifyService: NotificationsService,
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
   async create(
@@ -19,6 +21,10 @@ export class UserService {
     },
   ): Promise<User & { _id: Types.ObjectId }> {
     await this.statsService.create({ ref: createUserDto.UserEmail });
+    await this.notifyService.createNotify(
+      createUserDto.UserEmail,
+      'Congratulations on registering in our application',
+    );
     return new this.userModel(createUserDto).save();
   }
 
@@ -58,8 +64,8 @@ export class UserService {
       .lookup({
         from: 'userstats',
         as: 'stats',
-        foreignField: 'UserEmail',
-        localField: 'ref',
+        foreignField: 'ref',
+        localField: 'UserEmail',
       })
       .project({
         stats: {
@@ -72,6 +78,20 @@ export class UserService {
       })
       .unwind({
         path: '$stats',
+      })
+      .lookup({
+        from: 'notifies',
+        as: 'notifies',
+        foreignField: 'ref',
+        localField: 'UserEmail',
+      })
+      .project({
+        notifies: {
+          _id: 0,
+          ref: 0,
+          __v: 0,
+          updatedAt: 0,
+        },
       });
     if (user.length) {
       return {

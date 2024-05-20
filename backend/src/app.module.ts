@@ -8,6 +8,7 @@ import { GoogleStrategy } from 'src/auth/strategies/google.strategy';
 import { UserModule } from './user/user.module';
 import { AvatarApiModule } from './avatar-api/avatar-api.module';
 import { StatsModule } from './stats/stats.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { StatsModule } from './stats/stats.module';
     UserModule,
     AvatarApiModule,
     StatsModule,
+    NotificationsModule,
   ],
   providers: [GoogleStrategy],
 })
