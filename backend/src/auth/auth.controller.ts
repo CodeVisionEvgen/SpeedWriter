@@ -27,6 +27,7 @@ import { ExtractJwt } from 'passport-jwt';
 import { UserType } from 'types/user.type';
 import { JwtType } from 'types/jwt.type';
 import { ConfigService } from '@nestjs/config';
+import { OAuthQueryGuard } from './guards/google-oauth-query.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -36,7 +37,7 @@ export class AuthController {
     private readonly avatarApiService: AvatarApiService,
     private readonly configService: ConfigService,
   ) {}
-  @UseGuards(GoogleOauthGuard)
+  @UseGuards(OAuthQueryGuard, GoogleOauthGuard)
   @Get('google/callback')
   async googleCallback(
     @Req()
