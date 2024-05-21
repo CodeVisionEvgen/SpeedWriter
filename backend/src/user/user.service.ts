@@ -6,11 +6,13 @@ import { User } from 'src/schemas/user.schema';
 import { Model, Types } from 'mongoose';
 import { StatsService } from 'src/stats/stats.service';
 import { NotificationsService } from 'src/notifications/notifications.service';
+import { AchievementsService } from 'src/achievements/achievements.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly statsService: StatsService,
+    private readonly achievementsService: AchievementsService,
     private readonly notifyService: NotificationsService,
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
@@ -20,6 +22,7 @@ export class UserService {
       UserProvider: string;
     },
   ): Promise<User & { _id: Types.ObjectId }> {
+    await this.achievementsService.create({ ref: createUserDto.UserEmail });
     await this.statsService.create({ ref: createUserDto.UserEmail });
     await this.notifyService.createNotify(
       createUserDto.UserEmail,

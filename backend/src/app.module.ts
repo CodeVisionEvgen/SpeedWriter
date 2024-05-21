@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { AvatarApiModule } from './avatar-api/avatar-api.module';
 import { StatsModule } from './stats/stats.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { AchievementsModule } from './achievements/achievements.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     AvatarApiModule,
     StatsModule,
     NotificationsModule,
+    AchievementsModule,
   ],
   providers: [GoogleStrategy],
 })
